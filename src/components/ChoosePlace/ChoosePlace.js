@@ -45,7 +45,7 @@ export default class ChoosePlace extends Component {
   updatePlaces = (event) => {
     let cityId = event.target.value;
     let city = this.state.cities.filter(city => city.id === cityId)[0]
-    this.setState({currentCity: city})
+    this.setState({currentCity: city, currentCityId: cityId})
     getActivePlaces({cityId: cityId})
       .then((response) => {
         this.setState({places: response.response.data})
@@ -64,6 +64,10 @@ export default class ChoosePlace extends Component {
       return <MenuItem key={schedule.id} value={schedule.id}>{schedule.day} - {schedule.time}</MenuItem>
     })
     return schedules
+  }
+
+  updateScheduleId = (event) => {
+    this.setState({currentScheduleId: event.target.value})
   }
 
   renderIf = (condition, content) => {
@@ -98,6 +102,7 @@ export default class ChoosePlace extends Component {
                 <InputLabel htmlFor="schedule-selector">Horario</InputLabel>
                 <Select
                   value={this.state.currentScheduleId}
+                  onChange={this.updateScheduleId}
                   inputProps={{id: 'schedule-selector'}}
                 >
                   {this.showSchedules()}
