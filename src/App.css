@@ -36,3 +36,8 @@
   background-color: #DC983C !important;
   color: #fff !important;
 }
+
+.App .form-control {
+  min-width: 120px;
+  margin: 5px;
+}
