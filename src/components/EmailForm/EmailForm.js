@@ -17,7 +17,7 @@ class EmailForm extends React.Component {
     if (this.state.email !== "") {
       emailLookup(this.state.email)
         .then((response) => {
-          this.props.onUpdateHistory({currentRoute: routes.EMAIL, isRegistered: !!response.response.new_user});
+          this.props.onUpdateHistory({currentRoute: routes.EMAIL, isRegistered: !!response.new_user});
         })
     }
   }

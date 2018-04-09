@@ -31,7 +31,7 @@ export default class ChoosePlace extends Component {
   loadCities = () => {
     getCities()
       .then((response) => {
-        this.setState({cities: response.response.data})
+        this.setState({cities: response})
     })
   }
 
@@ -48,14 +48,14 @@ export default class ChoosePlace extends Component {
     this.setState({currentCity: city, currentCityId: cityId})
     getActivePlaces({cityId: cityId})
       .then((response) => {
-        this.setState({places: response.response.data})
+        this.setState({places: response})
     })
   }
 
   loadSchedules = () => {
     getSchedules()
       .then((response) => {
-        this.setState({schedules: response.response.data})
+        this.setState({schedules: response})
     })
   }
 

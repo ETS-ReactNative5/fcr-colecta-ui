@@ -48,8 +48,8 @@ class PersonalData extends Component {
     let data = Object.keys(state).reduce((acc, k) => ({...acc, [k]: state[k].value}), {});
     savePersonalData(data)
       .then((response) => {
-        if (response.response.data.success) {
-          this.props.onUpdateHistory({currentRoute: routes.PERSONAL_DATA, personId: response.response.data.person.id});
+        if (response.success) {
+          this.props.onUpdateHistory({currentRoute: routes.PERSONAL_DATA, personId: response.person.id});
         }
       })
   }
