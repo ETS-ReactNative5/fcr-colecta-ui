@@ -56,106 +56,104 @@ class PersonalData extends Component {
 
   render() {
     return (
-      <div className="App">
-        <div className="personal-data">
-          <header className="App-header">
-            <h1 className="App-title">Datos Personales</h1>
-          </header>
-          <form>
-            <Grid container justify="center">
-              <Grid item xs={3}>
-                <TextField
-                  label="Nombre"
-                  name="firstname"
-                  placeholder="Ingresa tu nombre"
-                  onFocus={this.handleFocus}
-                  onChange={this.handleInput}
-                  value={this.state.firstname.value}
-                  error={this.state.firstname.touched && !this.state.firstname.isValid}
-                  required={this.state.firstname.required}
-                /><br/>
-                <TextField
-                  label="Apellido"
-                  name="lastname"
-                  placeholder="Ingresa tu apellido"
-                  onFocus={this.handleFocus}
-                  onChange={this.handleInput}
-                  value={this.state.lastname.value}
-                  error={this.state.lastname.touched && !this.state.lastname.isValid}
-                  required={this.state.lastname.required}
-                /><br/>
-                <TextField
-                  label="Cédula de Identidad"
-                  name="identifier"
-                  placeholder="Ingresa tu cédula de identidad"
-                  onFocus={this.handleFocus}
-                  onChange={this.handleInput}
-                  value={this.state.identifier.value}
-                  error={this.state.identifier.touched && !this.state.identifier.isValid}
-                  required={this.state.identifier.required}
-                /><br/>
-                <TextField
-                  label="Fecha de nacimiento"
-                  name="birthday"
-                  placeholder="Ingresa tu fecha de nacimiento"
-                  type="date"
-                  onFocus={this.handleFocus}
-                  onChange={this.handleInput}
-                  value={this.state.birthday.value}
-                  error={this.state.birthday.touched && !this.state.birthday.isValid}
-                  required={this.state.birthday.required}
-                />
-              </Grid>
-              <Grid item xs={3}>
-                <TextField
-                  label="Teléfono Fijo"
-                  name="phone"
-                  placeholder="Ingresa tu número de teléfono"
-                  onFocus={this.handleFocus}
-                  onChange={this.handleInput}
-                  value={this.state.phone.value}
-                  error={this.state.phone.touched && !this.state.phone.isValid}
-                  required={this.state.phone.required}
-                /><br/>
-                <TextField
-                  label="Teléfono Celular"
-                  name="cellphone"
-                  placeholder="Ingresa tu número celular"
-                  onFocus={this.handleFocus}
-                  onChange={this.handleInput}
-                  value={this.state.cellphone.value}
-                  error={this.state.cellphone.touched && !this.state.cellphone.isValid}
-                  required={this.state.cellphone.required}
-                /><br/>
-                <TextField
-                  label="Correo Electrónico"
-                  name="email"
-                  placeholder="Ingresa tu correo electrónico"
-                  type="email"
-                  onFocus={this.handleFocus}
-                  onChange={this.handleInput}
-                  value={this.state.email.value}
-                  error={this.state.email.touched && !this.state.email.isValid}
-                  required={this.state.email.required}
-                /><br/>
-                <TextField
-                  label="Confirmación Correo"
-                  name="email_confirmation"
-                  placeholder="Ingresa nuevamente tu correo electrónico"
-                  type="email_confirmation"
-                  onFocus={this.handleFocus}
-                  onChange={this.handleInput}
-                  value={this.state.email_confirmation.value}
-                  error={this.state.email_confirmation.touched && !this.state.email_confirmation.isValid}
-                  required={this.state.email_confirmation.required}
-                /><br/>
-              </Grid>
+      <div className="personal-data">
+        <header className="App-header">
+          <h1 className="App-title">Datos Personales</h1>
+        </header>
+        <form>
+          <Grid container justify="center">
+            <Grid item xs={3}>
+              <TextField
+                label="Nombre"
+                name="firstname"
+                placeholder="Ingresa tu nombre"
+                onFocus={this.handleFocus}
+                onChange={this.handleInput}
+                value={this.state.firstname.value}
+                error={this.state.firstname.touched && !this.state.firstname.isValid}
+                required={this.state.firstname.required}
+              /><br/>
+              <TextField
+                label="Apellido"
+                name="lastname"
+                placeholder="Ingresa tu apellido"
+                onFocus={this.handleFocus}
+                onChange={this.handleInput}
+                value={this.state.lastname.value}
+                error={this.state.lastname.touched && !this.state.lastname.isValid}
+                required={this.state.lastname.required}
+              /><br/>
+              <TextField
+                label="Cédula de Identidad"
+                name="identifier"
+                placeholder="Ingresa tu cédula de identidad"
+                onFocus={this.handleFocus}
+                onChange={this.handleInput}
+                value={this.state.identifier.value}
+                error={this.state.identifier.touched && !this.state.identifier.isValid}
+                required={this.state.identifier.required}
+              /><br/>
+              <TextField
+                label="Fecha de nacimiento"
+                name="birthday"
+                placeholder="Ingresa tu fecha de nacimiento"
+                type="date"
+                onFocus={this.handleFocus}
+                onChange={this.handleInput}
+                value={this.state.birthday.value}
+                error={this.state.birthday.touched && !this.state.birthday.isValid}
+                required={this.state.birthday.required}
+              />
             </Grid>
-            <Button variant="raised" className="homepage-button" onClick={this.handleSubmit}>
-              Guardar
-            </Button>
-          </form>
-        </div>
+            <Grid item xs={3}>
+              <TextField
+                label="Teléfono Fijo"
+                name="phone"
+                placeholder="Ingresa tu número de teléfono"
+                onFocus={this.handleFocus}
+                onChange={this.handleInput}
+                value={this.state.phone.value}
+                error={this.state.phone.touched && !this.state.phone.isValid}
+                required={this.state.phone.required}
+              /><br/>
+              <TextField
+                label="Teléfono Celular"
+                name="cellphone"
+                placeholder="Ingresa tu número celular"
+                onFocus={this.handleFocus}
+                onChange={this.handleInput}
+                value={this.state.cellphone.value}
+                error={this.state.cellphone.touched && !this.state.cellphone.isValid}
+                required={this.state.cellphone.required}
+              /><br/>
+              <TextField
+                label="Correo Electrónico"
+                name="email"
+                placeholder="Ingresa tu correo electrónico"
+                type="email"
+                onFocus={this.handleFocus}
+                onChange={this.handleInput}
+                value={this.state.email.value}
+                error={this.state.email.touched && !this.state.email.isValid}
+                required={this.state.email.required}
+              /><br/>
+              <TextField
+                label="Confirmación Correo"
+                name="email_confirmation"
+                placeholder="Ingresa nuevamente tu correo electrónico"
+                type="email_confirmation"
+                onFocus={this.handleFocus}
+                onChange={this.handleInput}
+                value={this.state.email_confirmation.value}
+                error={this.state.email_confirmation.touched && !this.state.email_confirmation.isValid}
+                required={this.state.email_confirmation.required}
+              /><br/>
+            </Grid>
+          </Grid>
+          <Button variant="raised" className="homepage-button" onClick={this.handleSubmit}>
+            Guardar
+          </Button>
+        </form>
       </div>
     )
   }

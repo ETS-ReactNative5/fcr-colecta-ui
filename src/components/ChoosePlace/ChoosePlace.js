@@ -21,9 +21,9 @@ export default class ChoosePlace extends Component {
       currentScheduleId: "",
       schedules: []
     }
-    this.loadCities = this.loadCities.bind(this)
-    this.showCities = this.showCities.bind(this)
-    this.updatePlaces = this.updatePlaces.bind(this)
+  }
+
+  componentDidMount() {
     this.loadCities()
     this.loadSchedules()
   }
@@ -32,14 +32,13 @@ export default class ChoosePlace extends Component {
     getCities()
       .then((response) => {
         this.setState({cities: response})
-    })
+      })
   }
 
   showCities = () => {
-    let cities = this.state.cities.map((city) => {
+    return this.state.cities.map((city) => {
       return <MenuItem key={city.id} value={city.id}>{city.name}</MenuItem>
     })
-    return cities
   }
 
   updatePlaces = (event) => {
@@ -49,21 +48,20 @@ export default class ChoosePlace extends Component {
     getActivePlaces({cityId: cityId})
       .then((response) => {
         this.setState({places: response})
-    })
+      })
   }
 
   loadSchedules = () => {
     getSchedules()
       .then((response) => {
         this.setState({schedules: response})
-    })
+      })
   }
 
   showSchedules = () => {
-    let schedules = this.state.schedules.map((schedule) => {
+    return this.state.schedules.map((schedule) => {
       return <MenuItem key={schedule.id} value={schedule.id}>{schedule.day} - {schedule.time}</MenuItem>
     })
-    return schedules
   }
 
   updateScheduleId = (event) => {
@@ -80,55 +78,52 @@ export default class ChoosePlace extends Component {
 
   render() {
     return (
-      <div className="App">
-        <div className="personal-data">
-          <header className="App-header">
-            <h1 className="App-title">Escoja el lugar</h1>
-          </header>
-          <Grid container justify="center">
-            <Grid item xs={12}>
-              <FormControl className="form-control">
-                <InputLabel htmlFor="city-selector">Ciudad</InputLabel>
-                <Select
-                  value={this.state.currentCityId}
-                  onChange={this.updatePlaces}
-                  inputProps={{id: 'city-selector'}}
-                >
-                  {this.showCities()}
-                </Select>
-                <FormHelperText>Selecciona la ciudad</FormHelperText>
-              </FormControl>
-              <FormControl className="form-control">
-                <InputLabel htmlFor="schedule-selector">Horario</InputLabel>
-                <Select
-                  value={this.state.currentScheduleId}
-                  onChange={this.updateScheduleId}
-                  inputProps={{id: 'schedule-selector'}}
-                >
-                  {this.showSchedules()}
-                </Select>
-                <FormHelperText>Selecciona el horario</FormHelperText>
-              </FormControl>
-            </Grid>
-            <Grid item xs={4} style={{maxHeight: "100px"}}>
-              {
-                this.renderIf(
-                  this.state.currentCity.id != null,
-                  <PlacesMap
-                    coordinates={{
-                      lat: this.state.currentCity.latitude,
-                      lng: this.state.currentCity.longitude
-                    }}
-                    places={this.state.places}
-                    currentPlace={this.state.place}
-                    onUpdateMap={this.updateMap}
-                  />
-                )
-              }
-            </Grid>
+      <div className="choose-place">
+        <header className="App-header">
+          <h1 className="App-title">Escoja el lugar</h1>
+        </header>
+        <Grid container justify="center">
+          <Grid item xs={12}>
+            <FormControl className="form-control">
+              <InputLabel htmlFor="city-selector">Ciudad</InputLabel>
+              <Select
+                value={this.state.currentCityId}
+                onChange={this.updatePlaces}
+                inputProps={{id: 'city-selector'}}
+              >
+                {this.showCities()}
+              </Select>
+              <FormHelperText>Selecciona la ciudad</FormHelperText>
+            </FormControl>
+            <FormControl className="form-control">
+              <InputLabel htmlFor="schedule-selector">Horario</InputLabel>
+              <Select
+                value={this.state.currentScheduleId}
+                onChange={this.updateScheduleId}
+                inputProps={{id: 'schedule-selector'}}
+              >
+                {this.showSchedules()}
+              </Select>
+              <FormHelperText>Selecciona el horario</FormHelperText>
+            </FormControl>
           </Grid>
-
-        </div>
+          <Grid item xs={4} style={{maxHeight: "100px"}}>
+            {
+              this.renderIf(
+                this.state.currentCity.id != null,
+                <PlacesMap
+                  coordinates={{
+                    lat: this.state.currentCity.latitude,
+                    lng: this.state.currentCity.longitude
+                  }}
+                  places={this.state.places}
+                  currentPlace={this.state.place}
+                  onUpdateMap={this.updateMap}
+                />
+              )
+            }
+          </Grid>
+        </Grid>
       </div>
     )
   }

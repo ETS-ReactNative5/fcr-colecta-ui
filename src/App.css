@@ -40,4 +40,5 @@
 .App .form-control {
   min-width: 240px;
   margin: 5px;
+  text-align: left;
 }
