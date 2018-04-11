@@ -39,7 +39,6 @@ class PersonalData extends Component {
   }
 
   isValid = (name, value) => {
-    console.log(name, value, !this.state[name].required || value !== "")
     return !this.state[name].required || value !== ""
   }
 

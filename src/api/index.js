@@ -21,6 +21,12 @@ export const savePersonalData = (data) => {
     .catch(error => error)
 }
 
+export const saveFriends = (data) => {
+  return axios.post('friends', data)
+    .then(response => response.data)
+    .catch(error => error)
+}
+
 export const getCities = () => {
   return axios.get('cities')
     .then(response => response.data)

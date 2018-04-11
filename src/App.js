@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import EmailForm from './components/EmailForm/'
 import PersonalData from './components/PersonalData'
+import Friends from './components/Friends'
 import ChoosePlace from './components/ChoosePlace'
 import {BrowserRouter as Router, Route, Switch, Redirect} from "react-router-dom";
 import * as routes from './constants/routes'
@@ -17,7 +18,10 @@ class App extends Component {
       }
     }
     if (data.currentRoute === routes.PERSONAL_DATA) {
-      history.push(routes.CHOOSE_PLACE)
+      history.push(routes.FRIENDS);
+    }
+    if (data.currentRoute === routes.FRIENDS) {
+      history.push(routes.CHOOSE_PLACE);
     }
   }
 
@@ -40,6 +44,12 @@ class App extends Component {
               path={routes.PERSONAL_DATA}
               render={(routeProps) => (
                 <PersonalData {...routeProps} onUpdateHistory={(data) => this.updateHistory(routeProps.history, data)}/>
+              )}
+            />
+            <Route
+              path={routes.FRIENDS}
+              render={(routeProps) => (
+                <Friends {...routeProps} onUpdateHistory={(data) => this.updateHistory(routeProps.history, data)}/>
               )}
             />
             <Route
