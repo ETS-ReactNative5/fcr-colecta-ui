@@ -7,7 +7,7 @@ import {FormControl} from 'material-ui/Form';
 import Table, {TableBody, TableCell, TableHead, TableRow, TableFooter} from 'material-ui/Table';
 import IconButton from 'material-ui/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
-import {saveFriends} from '../../api'
+import {saveFriends, emailLookup} from '../../api'
 import * as routes from "../../constants/routes";
 
 
@@ -45,15 +45,21 @@ class Friends extends React.Component {
   }
 
   addFriend = () => {
-    this.setState({
-      friends: [...this.state.friends, {
-        firstname: this.state.firstname.value,
-        lastname: this.state.lastname.value,
-        email: this.state.email.value,
-        cellphone: this.state.cellphone.value
-      }]
+    emailLookup(this.state.email.value).then(response => {
+      if (response.new_user) {
+        this.setState({
+          friends: [...this.state.friends, {
+            firstname: this.state.firstname.value,
+            lastname: this.state.lastname.value,
+            email: this.state.email.value,
+            cellphone: this.state.cellphone.value
+          }]
+        })
+      } else {
+        alert('Ya existe un voluntario con ese correo.')
+      }
+      this.resetValues();
     })
-    this.resetValues();
   }
 
   deleteFriend = (idFriend) => {
@@ -63,7 +69,7 @@ class Friends extends React.Component {
   }
 
   handleSubmit = () => {
-    saveFriends(this.state.friends)
+    saveFriends({friends: this.state.friends})
       .then((response) => {
         this.props.onUpdateHistory({currentRoute: routes.FRIENDS, ...response});
       })
