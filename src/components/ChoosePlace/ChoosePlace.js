@@ -19,7 +19,8 @@ export default class ChoosePlace extends Component {
       places: [],
       currentPlace: "",
       currentScheduleId: "",
-      schedules: []
+      schedules: [],
+      allPlacesChoosen: false
     }
   }
 
@@ -42,13 +43,26 @@ export default class ChoosePlace extends Component {
   }
 
   updatePlaces = (event) => {
-    let cityId = event.target.value;
-    let city = this.state.cities.filter(city => city.id === cityId)[0]
-    this.setState({currentCity: city, currentCityId: cityId})
-    getActivePlaces({cityId: cityId})
-      .then((response) => {
-        this.setState({places: response})
-      })
+    let cityId = ""
+    let scheduleId = ""
+    if (event.target.name == 'city') {
+      cityId = event.target.value
+      scheduleId = this.state.currentScheduleId
+      let city = this.state.cities.filter(city => city.id === cityId)[0]
+      this.setState({currentCity: city, currentCityId: cityId})
+    }
+    if (event.target.name == 'schedule') {
+      cityId = this.state.currentCityId
+      scheduleId = event.target.value
+      this.setState({currentScheduleId: scheduleId})
+    }
+    if (cityId != "" && scheduleId != "") {
+      this.setState({allPlacesChoosen: false})
+      getActivePlaces({cityId: cityId, scheduleId: scheduleId})
+        .then((response) => {
+          this.setState({places: response, allPlacesChoosen: response.length == 0})
+        })
+    }
   }
 
   loadSchedules = () => {
@@ -62,10 +76,6 @@ export default class ChoosePlace extends Component {
     return this.state.schedules.map((schedule) => {
       return <MenuItem key={schedule.id} value={schedule.id}>{schedule.day} - {schedule.time}</MenuItem>
     })
-  }
-
-  updateScheduleId = (event) => {
-    this.setState({currentScheduleId: event.target.value})
   }
 
   renderIf = (condition, content) => {
@@ -87,6 +97,7 @@ export default class ChoosePlace extends Component {
             <FormControl className="form-control">
               <InputLabel htmlFor="city-selector">Ciudad</InputLabel>
               <Select
+                name="city"
                 value={this.state.currentCityId}
                 onChange={this.updatePlaces}
                 inputProps={{id: 'city-selector'}}
@@ -98,8 +109,9 @@ export default class ChoosePlace extends Component {
             <FormControl className="form-control">
               <InputLabel htmlFor="schedule-selector">Horario</InputLabel>
               <Select
+                name="schedule"
                 value={this.state.currentScheduleId}
-                onChange={this.updateScheduleId}
+                onChange={this.updatePlaces}
                 inputProps={{id: 'schedule-selector'}}
               >
                 {this.showSchedules()}
@@ -110,7 +122,7 @@ export default class ChoosePlace extends Component {
           <Grid item xs={4} style={{maxHeight: "100px"}}>
             {
               this.renderIf(
-                this.state.currentCity.id != null,
+                this.state.currentCity.id != null && this.state.currentScheduleId != "" && !this.state.allPlacesChoosen,
                 <PlacesMap
                   coordinates={{
                     lat: this.state.currentCity.latitude,
@@ -122,6 +134,7 @@ export default class ChoosePlace extends Component {
                 />
               )
             }
+            {this.state.allPlacesChoosen && "Estan todos llenos"}
           </Grid>
         </Grid>
       </div>

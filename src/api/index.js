@@ -34,7 +34,8 @@ export const getCities = () => {
 }
 
 export const getActivePlaces = (data) => {
-  return axios.get(`places/${data.cityId}/active`)
+  return axios.get(`places/${data.cityId}/active`,
+    { params: { scheduleId: data.scheduleId } })
     .then(response => response.data)
     .catch(error => error)
 }
