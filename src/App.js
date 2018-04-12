@@ -10,18 +10,27 @@ import './App.css';
 
 class App extends Component {
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      email: '',
+      currentUser: {}
+    }
+  }
+
   updateHistory = (history, data) => {
     if (data.currentRoute === routes.EMAIL) {
       if (!data.isRegistered) {
-        history.push(routes.PERSONAL_DATA);
-        return;
+        this.setState({email: data.email})
+        history.push(routes.PERSONAL_DATA)
       }
     }
     if (data.currentRoute === routes.PERSONAL_DATA) {
-      history.push(routes.FRIENDS);
+      this.setState({currentUser: data.user})
+      history.push(routes.FRIENDS)
     }
     if (data.currentRoute === routes.FRIENDS) {
-      history.push(routes.CHOOSE_PLACE);
+      history.push(routes.CHOOSE_PLACE)
     }
   }
 
@@ -37,25 +46,25 @@ class App extends Component {
             <Route
               path={routes.EMAIL}
               render={(routeProps) => (
-                <EmailForm {...routeProps} onUpdateHistory={(data) => this.updateHistory(routeProps.history, data)}/>
+                <EmailForm {...routeProps} {...this.state} onUpdateHistory={(data) => this.updateHistory(routeProps.history, data)}/>
               )}
             />
             <Route
               path={routes.PERSONAL_DATA}
               render={(routeProps) => (
-                <PersonalData {...routeProps} onUpdateHistory={(data) => this.updateHistory(routeProps.history, data)}/>
+                <PersonalData {...routeProps} {...this.state} onUpdateHistory={(data) => this.updateHistory(routeProps.history, data)}/>
               )}
             />
             <Route
               path={routes.FRIENDS}
               render={(routeProps) => (
-                <Friends {...routeProps} onUpdateHistory={(data) => this.updateHistory(routeProps.history, data)}/>
+                <Friends {...routeProps} {...this.state} onUpdateHistory={(data) => this.updateHistory(routeProps.history, data)}/>
               )}
             />
             <Route
               path={routes.CHOOSE_PLACE}
               render={(routeProps) => (
-                <ChoosePlace {...routeProps} onUpdateHistory={(data) => this.updateHistory(routeProps.history, data)}/>
+                <ChoosePlace {...routeProps} {...this.state} onUpdateHistory={(data) => this.updateHistory(routeProps.history, data)}/>
               )}
             />
           </Switch>

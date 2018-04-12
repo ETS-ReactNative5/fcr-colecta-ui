@@ -14,12 +14,11 @@ import * as routes from "../../constants/routes";
 class Friends extends React.Component {
   constructor(props) {
     super(props)
-    this.defaultValues =
-      this.state = {
-        firstname: {value: '', touched: false, isValid: false, required: true},
-        lastname: {value: '', touched: false, isValid: false, required: true},
-        email: {value: '', touched: false, isValid: false, required: true},
-        cellphone: {value: '', touched: false, isValid: false, required: true},
+    this.state = {
+      firstname: {value: '', touched: false, isValid: false, required: true},
+      lastname: {value: '', touched: false, isValid: false, required: true},
+      email: {value: '', touched: false, isValid: false, required: true},
+      cellphone: {value: '', touched: false, isValid: false, required: true},
         friends: []
       }
   }
@@ -52,7 +51,8 @@ class Friends extends React.Component {
             firstname: this.state.firstname.value,
             lastname: this.state.lastname.value,
             email: this.state.email.value,
-            cellphone: this.state.cellphone.value
+            cellphone: this.state.cellphone.value,
+            invited_by_id: this.props.currentUser.id
           }]
         })
       } else {
@@ -71,7 +71,11 @@ class Friends extends React.Component {
   handleSubmit = () => {
     saveFriends({friends: this.state.friends})
       .then((response) => {
-        this.props.onUpdateHistory({currentRoute: routes.FRIENDS, ...response});
+        if (response.success === true) {
+          this.props.onUpdateHistory({currentRoute: routes.FRIENDS, ...response});
+        } else {
+          alert('Error al tratar de guardar los amigos')
+        }
       })
   }
 
@@ -97,7 +101,7 @@ class Friends extends React.Component {
           Recuerda que tienes que invitar al menos a 5 amigos para reservar un punto y luego entre todos completar un
           grupo de 10.
         </Typography>
-        <Grid container>
+        <Grid container spacing={16}>
           <Grid item>
             <form>
               <FormControl className="form-control">
@@ -144,13 +148,16 @@ class Friends extends React.Component {
                   required={this.state.cellphone.required}
                 />
               </FormControl><br/>
-              <Button variant="raised" className="homepage-button" onClick={this.addFriend}>
-                Agregar amigo
-              </Button>
+              {
+                this.state.friends.length < 10 &&
+                <Button variant="raised" className="homepage-button" onClick={this.addFriend}>
+                  Agregar amigo
+                </Button>
+              }
             </form>
           </Grid>
-        </Grid>
         {this.state.friends.length > 0 &&
+          <Grid item>
         <Table>
           <TableHead>
             <TableRow>
@@ -193,7 +200,9 @@ class Friends extends React.Component {
             </TableRow>
           </TableFooter>
         </Table>
+          </Grid>
         }
+        </Grid>
       </div>
     )
   }

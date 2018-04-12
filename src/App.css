@@ -42,3 +42,25 @@
   margin: 5px;
   text-align: left;
 }
+
+.App .form-control [role=radiogroup] {
+  flex-direction: row;
+}
+
+.App .form-control [role=radiogroup] .options {
+  margin-left: 0px;
+}
+
+.App .form-control [role=radiogroup] .options span:first-child {
+  width: 26px;
+}
+
+.social-logo {
+  width: 30px;
+}
+
+.App .social-label {
+  height: 30px;
+  line-height: 33px;
+  vertical-align: middle;
+}
