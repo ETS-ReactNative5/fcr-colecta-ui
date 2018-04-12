@@ -4,8 +4,13 @@ import Grid from 'material-ui/Grid';
 import Button from 'material-ui/Button';
 import * as routes from '../../constants/routes'
 import {savePersonalData} from '../../api'
+import Radio, {RadioGroup} from 'material-ui/Radio';
+import {FormControl, FormLabel, FormControlLabel} from 'material-ui/Form';
 
 import 'react-datepicker/dist/react-datepicker.css';
+
+import fbLogo from '../../images/facebook.png';
+import twLogo from '../../images/twitter.jpg';
 
 class PersonalData extends Component {
   constructor(props) {
@@ -14,10 +19,11 @@ class PersonalData extends Component {
       firstname: {value: "", required: true, isValid: false, touched: false},
       lastname: {value: "", required: true, isValid: false, touched: false},
       identifier: {value: "", required: true, isValid: false, touched: false},
+      gender: {value: "", required: true, isValid: false, touched: false},
       birthday: {value: "2000-01-01", required: true, isValid: false, touched: false},
       phone: {value: "", required: true, isValid: false, touched: false},
       cellphone: {value: "", required: true, isValid: false, touched: false},
-      email: {value: "", required: true, isValid: false, touched: false},
+      email: {value: this.props.email, required: true, isValid: false, touched: false},
       email_confirmation: {value: "", required: true, isValid: false, touched: false},
     }
   }
@@ -39,7 +45,6 @@ class PersonalData extends Component {
   }
 
   isValid = (name, value) => {
-    console.log(name, value, !this.state[name].required || value !== "")
     return !this.state[name].required || value !== ""
   }
 
@@ -48,22 +53,22 @@ class PersonalData extends Component {
     let data = Object.keys(state).reduce((acc, k) => ({...acc, [k]: state[k].value}), {});
     savePersonalData(data)
       .then((response) => {
-        if (response.response.data.success) {
-          this.props.onUpdateHistory({currentRoute: routes.PERSONAL_DATA, personId: response.response.data.person.id});
+        if (response.success) {
+          this.props.onUpdateHistory({currentRoute: routes.PERSONAL_DATA, user: response.person});
         }
       })
   }
 
   render() {
     return (
-      <div className="App">
-        <div className="personal-data">
-          <header className="App-header">
-            <h1 className="App-title">Datos Personales</h1>
-          </header>
-          <form>
-            <Grid container justify="center">
-              <Grid item xs={3}>
+      <div className="personal-data">
+        <header className="App-header">
+          <h1 className="App-title">Datos Personales</h1>
+        </header>
+        <form>
+          <Grid container justify="center">
+            <Grid item xs={3}>
+              <FormControl className="form-control">
                 <TextField
                   label="Nombre"
                   name="firstname"
@@ -73,7 +78,9 @@ class PersonalData extends Component {
                   value={this.state.firstname.value}
                   error={this.state.firstname.touched && !this.state.firstname.isValid}
                   required={this.state.firstname.required}
-                /><br/>
+                />
+              </FormControl><br/>
+              <FormControl className="form-control">
                 <TextField
                   label="Apellido"
                   name="lastname"
@@ -83,7 +90,9 @@ class PersonalData extends Component {
                   value={this.state.lastname.value}
                   error={this.state.lastname.touched && !this.state.lastname.isValid}
                   required={this.state.lastname.required}
-                /><br/>
+                />
+              </FormControl><br/>
+              <FormControl className="form-control">
                 <TextField
                   label="Cédula de Identidad"
                   name="identifier"
@@ -93,7 +102,20 @@ class PersonalData extends Component {
                   value={this.state.identifier.value}
                   error={this.state.identifier.touched && !this.state.identifier.isValid}
                   required={this.state.identifier.required}
-                /><br/>
+                />
+              </FormControl><br/>
+              <FormControl className="form-control">
+                <FormLabel component="legend">Género</FormLabel>
+                <RadioGroup
+                  name="gender"
+                  onChange={this.handleInput}
+                  value={this.state.gender.value}
+                >
+                  <FormControlLabel value="female" control={<Radio/>} label="Femenino" className="options"/>
+                  <FormControlLabel value="male" control={<Radio/>} label="Masculino" className="options"/>
+                </RadioGroup>
+              </FormControl>
+              <FormControl className="form-control">
                 <TextField
                   label="Fecha de nacimiento"
                   name="birthday"
@@ -105,8 +127,10 @@ class PersonalData extends Component {
                   error={this.state.birthday.touched && !this.state.birthday.isValid}
                   required={this.state.birthday.required}
                 />
-              </Grid>
-              <Grid item xs={3}>
+              </FormControl>
+            </Grid>
+            <Grid item xs={3}>
+              <FormControl className="form-control">
                 <TextField
                   label="Teléfono Fijo"
                   name="phone"
@@ -116,7 +140,9 @@ class PersonalData extends Component {
                   value={this.state.phone.value}
                   error={this.state.phone.touched && !this.state.phone.isValid}
                   required={this.state.phone.required}
-                /><br/>
+                />
+              </FormControl><br/>
+              <FormControl className="form-control">
                 <TextField
                   label="Teléfono Celular"
                   name="cellphone"
@@ -126,7 +152,9 @@ class PersonalData extends Component {
                   value={this.state.cellphone.value}
                   error={this.state.cellphone.touched && !this.state.cellphone.isValid}
                   required={this.state.cellphone.required}
-                /><br/>
+                />
+              </FormControl><br/>
+              <FormControl className="form-control">
                 <TextField
                   label="Correo Electrónico"
                   name="email"
@@ -137,7 +165,9 @@ class PersonalData extends Component {
                   value={this.state.email.value}
                   error={this.state.email.touched && !this.state.email.isValid}
                   required={this.state.email.required}
-                /><br/>
+                />
+              </FormControl><br/>
+              <FormControl className="form-control">
                 <TextField
                   label="Confirmación Correo"
                   name="email_confirmation"
@@ -148,14 +178,26 @@ class PersonalData extends Component {
                   value={this.state.email_confirmation.value}
                   error={this.state.email_confirmation.touched && !this.state.email_confirmation.isValid}
                   required={this.state.email_confirmation.required}
-                /><br/>
-              </Grid>
+                />
+              </FormControl><br/>
+              <FormControl className="form-control">
+                <Grid container spacing={10}>
+                  <Grid xs={10} item><FormLabel className="social-label">Síguenos en Facebook</FormLabel></Grid>
+                  <Grid xs={2} item><a href="https://www.facebook.com/FCRecuador" target="_blank"><img src={fbLogo} className="social-logo"/></a></Grid>
+                </Grid>
+              </FormControl>
+              <FormControl className="form-control">
+                <Grid container spacing={10}>
+                  <Grid xs={10} item><FormLabel className="social-label">Síguenos en Twitter</FormLabel></Grid>
+                  <Grid xs={2} item><a href="https://twitter.com/juntossomosvida" target="_blank"><img src={twLogo} className="social-logo"/></a></Grid>
+                </Grid>
+              </FormControl>
             </Grid>
-            <Button variant="raised" className="homepage-button" onClick={this.handleSubmit}>
-              Guardar
-            </Button>
-          </form>
-        </div>
+          </Grid>
+          <Button variant="raised" className="homepage-button" onClick={this.handleSubmit}>
+            Guardar
+          </Button>
+        </form>
       </div>
     )
   }
