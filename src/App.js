@@ -3,6 +3,7 @@ import EmailForm from './components/EmailForm/'
 import PersonalData from './components/PersonalData'
 import Friends from './components/Friends'
 import ChoosePlace from './components/ChoosePlace'
+import ConfirmAccount from './components/ConfirmAccount'
 import {BrowserRouter as Router, Route, Switch, Redirect} from "react-router-dom";
 import * as routes from './constants/routes'
 
@@ -73,6 +74,12 @@ class App extends Component {
               path={routes.CHOOSE_PLACE}
               render={(routeProps) => (
                 <ChoosePlace {...routeProps} {...this.state} onUpdateHistory={(data) => this.updateHistory(routeProps.history, data)}/>
+              )}
+            />
+            <Route
+              path={routes.CONFIRM_ACCOUNT}
+              render={(routeProps) => (
+                <ConfirmAccount {...routeProps} {...this.state} onUpdateHistory={(data) => this.updateHistory(routeProps.history, data)}/>
               )}
             />
           </Switch>

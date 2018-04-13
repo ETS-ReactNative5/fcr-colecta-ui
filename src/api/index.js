@@ -61,3 +61,9 @@ export const reserveLocation = (data) => {
     .then(response => response.data)
     .catch(error => error)
 }
+
+export const validateAccount = (data) => {
+  return axios.post(`confirm_person/${data.token}`)
+    .then(response => response.data)
+    .catch(error => error)
+}

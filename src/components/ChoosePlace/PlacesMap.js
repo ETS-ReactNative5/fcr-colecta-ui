@@ -35,7 +35,7 @@ export default class PlacesMap extends Component {
   render() {
 
     return (
-      <div style={{height: '576px', width: '500px'}}>
+      <div style={{height: '576px', width: '100%'}}>
         <GoogleMapReact
           bootstrapURLKeys={{
             key: "AIzaSyDCEEtEPWvLwrP-M0nJz4MeIRtRa_wiuJk",
