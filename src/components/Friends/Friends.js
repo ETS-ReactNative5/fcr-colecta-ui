@@ -7,7 +7,10 @@ import {FormControl} from 'material-ui/Form';
 import Table, {TableBody, TableCell, TableHead, TableRow, TableFooter} from 'material-ui/Table';
 import IconButton from 'material-ui/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
-import {saveFriends, emailLookup} from '../../api'
+import DoneIcon from '@material-ui/icons/Done';
+import WarningIcon from '@material-ui/icons/Warning';
+import Tooltip from 'material-ui/Tooltip';
+import {saveFriends, emailLookup, getFriends} from '../../api'
 import * as routes from "../../constants/routes";
 import * as Validator from "../../utils/Validator";
 
@@ -27,6 +30,10 @@ class Friends extends React.Component {
   componentDidMount = () => {
     if (this.props.currentUser == null) {
       this.props.history.push(routes.PERSONAL_DATA);
+    } else {
+      getFriends(this.props.currentUser).then(response => {
+        this.setState({friends: response});
+      });
     }
   };
 
@@ -44,7 +51,7 @@ class Friends extends React.Component {
     hash.touched = true;
     hash.isValid = this.isValid(name, event.target.value);
     this.setState({[name]: hash});
-  }
+  };
 
   isValid = (name, value) => {
     const {required, validationMethod, validationParams} = this.state[name];
@@ -69,7 +76,8 @@ class Friends extends React.Component {
             lastname: fields.lastname.value,
             email: fields.email.value,
             cellphone: fields.cellphone.value,
-            invited_by_id: this.props.currentUser.id
+            invited_by_id: this.props.currentUser.id,
+            new_user: true
           }]
         });
       } else {
@@ -86,7 +94,7 @@ class Friends extends React.Component {
   };
 
   handleSubmit = () => {
-    saveFriends({friends: this.state.friends})
+    saveFriends({friends: this.state.friends.filter(f => f.new_user)})
       .then((response) => {
         if (response.success === true) {
           this.props.onUpdateHistory({
@@ -200,9 +208,27 @@ class Friends extends React.Component {
                       <TableCell>{friend.email}</TableCell>
                       <TableCell>{friend.cellphone}</TableCell>
                       <TableCell>
+                        {friend.new_user &&
+                          <Tooltip title="Borrar">
                         <IconButton aria-label="Delete" onClick={() => this.deleteFriend(idx)}>
                           <DeleteIcon/>
                         </IconButton>
+                          </Tooltip>
+                        }
+                        {
+                          !friend.new_user &&
+                            friend.confirmed &&
+                            <Tooltip title="Confirmado">
+                            <DoneIcon/>
+                            </Tooltip>
+                        }
+                        {
+                          !friend.new_user &&
+                            !friend.confirmed &&
+                            <Tooltip title="Pendiente de confirmación">
+                            <WarningIcon/>
+                            </Tooltip>
+                        }
                       </TableCell>
                     </TableRow>
                   )

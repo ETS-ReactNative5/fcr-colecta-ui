@@ -22,11 +22,51 @@ class App extends Component {
 
   updateHistory = (history, data) => {
     if (data.currentRoute === routes.EMAIL) {
-      if (!data.isRegistered) {
+      if (!!data.new_user) {
         this.setState(
           {email: data.email},
-          () => history.push(routes.PERSONAL_DATA)
+          () => history.push(routes.PERSONAL_DATA, data)
         );
+        return;
+      }
+      if (!data.has_personal_data) {
+        this.setState(
+          {email: data.email},
+          () => history.push(routes.PERSONAL_DATA, data)
+        )
+        return;
+      }
+      if (5 > data.friends_count) {
+        this.setState(
+          {
+            email: data.email,
+            currentUser: data
+          },
+          () => history.push(routes.FRIENDS)
+        )
+        return;
+      }
+      if (!data.has_location) {
+        this.setState(
+          {
+            email: data.email,
+            currentUser: data,
+            friendsCount: data.friends_count
+          },
+          () => history.push(routes.CHOOSE_PLACE)
+        )
+        return;
+      }
+      // To complete friends
+      if (10 > data.friends_count) {
+        this.setState(
+          {
+            email: data.email,
+            currentUser: data
+          },
+          () => history.push(routes.FRIENDS)
+        )
+        return;
       }
     }
     if (data.currentRoute === routes.PERSONAL_DATA) {

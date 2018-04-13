@@ -3,6 +3,7 @@ import axios from 'axios'
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 axios.defaults.timeout = 20000;
 axios.defaults.headers.post['Content-Type'] = 'application/json';
+axios.defaults.headers['Cache-Control'] = 'no-cache';
 axios.defaults.withCredentials = false;
 
 export const emailLookup = (email) => {
@@ -23,6 +24,12 @@ export const savePersonalData = (data) => {
 
 export const saveFriends = (data) => {
   return axios.post('friends', data)
+    .then(response => response.data)
+    .catch(error => error)
+}
+
+export const getFriends = (data) => {
+  return axios.get('friends', {params: {person_id: data.id}})
     .then(response => response.data)
     .catch(error => error)
 }

@@ -16,6 +16,7 @@ import twLogo from '../../images/twitter.jpg';
 class PersonalData extends Component {
   constructor(props) {
     super(props)
+
     this.state = {
       firstname: {value: "", required: true, isValid: false, touched: false},
       lastname: {value: "", required: true, isValid: false, touched: false},
@@ -24,7 +25,7 @@ class PersonalData extends Component {
       birthday: {value: "2000-01-01", required: true, isValid: false, touched: false},
       phone: {value: "", required: true, isValid: false, touched: false, validationMethod: Validator.validPhone},
       cellphone: {value: "", required: true, isValid: false, touched: false, validationMethod: Validator.validCellphone},
-      email: {value: this.props.email, required: true, isValid: false, touched: false, validationMethod: Validator.validEmail},
+      email: {value: props.email, required: true, isValid: false, touched: false, validationMethod: Validator.validEmail},
       email_confirmation: {value: "", required: true, isValid: false, touched: false, validationMethod: Validator.sameValue, validationParams: 'email'}
     }
   }
@@ -32,6 +33,24 @@ class PersonalData extends Component {
   componentDidMount = () => {
     if (this.props.email === "") {
       this.props.history.push(routes.EMAIL);
+    } else {
+      const {
+        firstname,
+        lastname,
+        identifier,
+        gender,
+        birthday,
+        phone,
+        cellphone} = this.props.location.state;
+      this.setState({
+        firstname: {value: firstname || this.state.firstname.value, ...this.state.firstname},
+        lastname: {value: lastname || this.state.lastname.value, ...this.state.lastname},
+        identifier: {value: identifier || this.state.identifier.value, ...this.state.identifier},
+        gender: {value: gender || this.state.gender.value, ...this.state.gender},
+        birthday: {value: birthday || this.state.birthday.value, ...this.state.birthday},
+        phone: {value: phone || this.state.phone.value, ...this.state.phone},
+        cellphone: {value: cellphone || this.state.cellphone.value, ...this.state.cellphone},
+      })
     }
   };
 

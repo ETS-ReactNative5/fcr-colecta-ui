@@ -9,8 +9,7 @@ class EmailForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "",
-      isRegistered: false
+      email: ""
     };
   }
 
@@ -18,7 +17,7 @@ class EmailForm extends React.Component {
     if (this.state.email !== "" && Validator.validEmail(this.state.email)) {
       emailLookup(this.state.email)
         .then((response) => {
-          this.props.onUpdateHistory({currentRoute: routes.EMAIL, isRegistered: !response.new_user, email: this.state.email});
+          this.props.onUpdateHistory({currentRoute: routes.EMAIL, ...response, email: this.state.email});
         })
     } else {
       alert('El correo no tiene un formato válido');
