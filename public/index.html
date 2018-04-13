@@ -2,31 +2,49 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
+    <title>Plataforma FCR</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.png">
+    <link href="https://fonts.googleapis.com/css?family=Anton|Oswald:300,400" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet" media="screen" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="theme-color" content="#000000">
-    <!--
-      manifest.json provides metadata used when your web app is added to the
-      homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
-    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
-
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>FCR Colecta</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
   </head>
   <body>
     <noscript>
       You need to enable JavaScript to run this app.
     </noscript>
-    <div id="root"></div>
+    <div id="top">
+      <div id="logo">
+          <img src="img/logo.png">
+      </div>
+      <div id="menu">
+          <ul>
+              <li>
+                  <a href="index.html" class="activo">Únete</a>
+              </li>
+              <li>
+                  <a href="colecta.html">Colecta FCR 2018</a>
+              </li>
+              <li>
+                  <a href="como.html">¿Cómo participar?</a>
+              </li>
+              <li>
+                  <a href="organizaciones.html">Organizaciones aliadas</a>
+              </li>
+          </ul>
+      </div>
+      <div class="clear"></div>
+  </div>
+  <div class="middle">
+
+      <p>Para dudas, comunícate con <a href="mailto:inscribete@fcr.org.ec" class="link">inscribete@fcr.org.ec</a></p>
+      <div class="container">
+        <div id="root"></div>
+      </div>
+  </div>
+    
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
