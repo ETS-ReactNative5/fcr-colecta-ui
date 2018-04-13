@@ -64,3 +64,31 @@
   line-height: 33px;
   vertical-align: middle;
 }
+
+.choose-place thead, .choose-place tfoot {
+  color: #fff;
+  background-color: #DC983C;
+}
+
+.choosen-place {
+  max-width: 400px;
+  margin-bottom: 10px;
+  margin-top: 5px;
+}
+dl:after {content:"";display:table;clear:both;}
+dd {
+  padding: .5em 0;
+}
+dt, dd {
+  display: inline-block;
+}
+dt {
+  width: 30%;
+  font-weight: bold;
+  text-align: right;
+}
+dd {
+  width: 40%;
+  padding-left: 1em;
+  text-align: left;
+}

@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import Typography from 'material-ui/Typography';
 import Grid from 'material-ui/Grid';
 import TextField from 'material-ui/TextField';
@@ -9,84 +9,105 @@ import IconButton from 'material-ui/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import {saveFriends, emailLookup} from '../../api'
 import * as routes from "../../constants/routes";
+import * as Validator from "../../utils/Validator";
 
 
 class Friends extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       firstname: {value: '', touched: false, isValid: false, required: true},
       lastname: {value: '', touched: false, isValid: false, required: true},
-      email: {value: '', touched: false, isValid: false, required: true},
-      cellphone: {value: '', touched: false, isValid: false, required: true},
-        friends: []
-      }
+      email: {value: '', touched: false, isValid: false, required: true, validationMethod: Validator.validEmail},
+      cellphone: {value: '', touched: false, isValid: false, required: true, validationMethod: Validator.validCellphone},
+      friends: []
+    };
   }
+
+  componentDidMount = () => {
+    if (this.props.currentUser == null) {
+      this.props.history.push(routes.PERSONAL_DATA);
+    }
+  };
 
   handleInput = (event) => {
-    const name = event.target.name
-    const value = event.target.value
-    const hash = this.state[name]
-    hash.value = value
-    hash.isValid = this.isValid(name, value)
-    this.setState({[name]: hash})
-  }
+    const {name, value} = event.target;
+    const hash = this.state[name];
+    hash.value = value;
+    hash.isValid = this.isValid(name, value);
+    this.setState({[name]: hash});
+  };
 
   handleFocus = (event) => {
-    const name = event.target.name
-    const hash = this.state[name]
-    hash.touched = true
-    this.setState({[name]: hash})
+    const name = event.target.name;
+    const hash = this.state[name];
+    hash.touched = true;
+    hash.isValid = this.isValid(name, event.target.value);
+    this.setState({[name]: hash});
   }
 
   isValid = (name, value) => {
-    return !this.state[name].required || value !== ""
+    const {required, validationMethod, validationParams} = this.state[name];
+    let possibleParam = this.state[validationParams];
+    if (possibleParam) {
+      possibleParam = possibleParam.value;
+    }
+    return (!required || value !== "") && (!validationMethod || validationMethod.call(this, value, possibleParam));
   }
 
   addFriend = () => {
-    emailLookup(this.state.email.value).then(response => {
+    const {friends, ...fields} = this.state;
+    if (Object.keys(fields).filter(f => !fields[f].isValid).length > 0) {
+      alert('Algunos de los campos tienen información no válida');
+      return;
+    }
+    emailLookup(fields.email.value).then(response => {
       if (response.new_user) {
         this.setState({
-          friends: [...this.state.friends, {
-            firstname: this.state.firstname.value,
-            lastname: this.state.lastname.value,
-            email: this.state.email.value,
-            cellphone: this.state.cellphone.value,
+          friends: [...friends, {
+            firstname: fields.firstname.value,
+            lastname: fields.lastname.value,
+            email: fields.email.value,
+            cellphone: fields.cellphone.value,
             invited_by_id: this.props.currentUser.id
           }]
-        })
+        });
       } else {
-        alert('Ya existe un voluntario con ese correo.')
+        alert('Ya existe un voluntario con ese correo.');
       }
       this.resetValues();
     })
-  }
+  };
 
   deleteFriend = (idFriend) => {
-    let friends = this.state.friends
+    let friends = this.state.friends;
     friends.splice(idFriend, 1);
     this.setState({friends: friends});
-  }
+  };
 
   handleSubmit = () => {
     saveFriends({friends: this.state.friends})
       .then((response) => {
         if (response.success === true) {
-          this.props.onUpdateHistory({currentRoute: routes.FRIENDS, ...response});
+          this.props.onUpdateHistory({
+            currentRoute: routes.FRIENDS,
+            friendsCount: this.state.friends.length,
+            ...response
+          });
         } else {
-          alert('Error al tratar de guardar los amigos')
+          alert('Error al tratar de guardar los amigos');
         }
       })
-  }
+  };
 
   resetValues = () => {
     this.setState({
       firstname: {value: '', touched: false, isValid: false, required: true},
       lastname: {value: '', touched: false, isValid: false, required: true},
-      email: {value: '', touched: false, isValid: false, required: true},
-      cellphone: {value: '', touched: false, isValid: false, required: true}
-    })
-  }
+      email: {value: '', touched: false, isValid: false, required: true, validationMethod: Validator.validEmail},
+      cellphone: {value: '', touched: false, isValid: false, required: true, validationMethod: Validator.validCellphone}
+    });
+  };
 
   render() {
     return (
@@ -158,54 +179,54 @@ class Friends extends React.Component {
           </Grid>
         {this.state.friends.length > 0 &&
           <Grid item>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell/>
-              <TableCell>Nombre</TableCell>
-              <TableCell>Apellido</TableCell>
-              <TableCell>Correo</TableCell>
-              <TableCell>Celular</TableCell>
-              <TableCell/>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {this.state.friends.map((friend, idx) => {
-              return (
-                <TableRow key={idx}>
-                  <TableCell>{idx + 1}</TableCell>
-                  <TableCell>{friend.firstname}</TableCell>
-                  <TableCell>{friend.lastname}</TableCell>
-                  <TableCell>{friend.email}</TableCell>
-                  <TableCell>{friend.cellphone}</TableCell>
-                  <TableCell>
-                    <IconButton aria-label="Delete" onClick={() => this.deleteFriend(idx)}>
-                      <DeleteIcon/>
-                    </IconButton>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell/>
+                  <TableCell>Nombre</TableCell>
+                  <TableCell>Apellido</TableCell>
+                  <TableCell>Correo</TableCell>
+                  <TableCell>Celular</TableCell>
+                  <TableCell/>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {this.state.friends.map((friend, idx) => {
+                  return (
+                    <TableRow key={idx}>
+                      <TableCell>{idx + 1}</TableCell>
+                      <TableCell>{friend.firstname}</TableCell>
+                      <TableCell>{friend.lastname}</TableCell>
+                      <TableCell>{friend.email}</TableCell>
+                      <TableCell>{friend.cellphone}</TableCell>
+                      <TableCell>
+                        <IconButton aria-label="Delete" onClick={() => this.deleteFriend(idx)}>
+                          <DeleteIcon/>
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  )
+                })}
+              </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TableCell colSpan={6}>
+                    {
+                      this.state.friends.length >= 5 &&
+                      <Button variant="raised" onClick={this.handleSubmit}>
+                        Guardar
+                      </Button>
+                    }
                   </TableCell>
                 </TableRow>
-              )
-            })}
-          </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TableCell colSpan={6}>
-                {
-                  this.state.friends.length >= 5 &&
-                  <Button variant="raised" onClick={this.handleSubmit}>
-                    Guardar
-                  </Button>
-                }
-              </TableCell>
-            </TableRow>
-          </TableFooter>
-        </Table>
+              </TableFooter>
+            </Table>
           </Grid>
         }
         </Grid>
       </div>
-    )
-  }
-}
+    );
+  };
+};
 
 export default Friends;

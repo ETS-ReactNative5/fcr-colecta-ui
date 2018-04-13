@@ -13,24 +13,32 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      email: '',
-      currentUser: {}
+      email: "",
+      currentUser: null,
+      friendsCount: 0
     }
   }
 
   updateHistory = (history, data) => {
     if (data.currentRoute === routes.EMAIL) {
       if (!data.isRegistered) {
-        this.setState({email: data.email})
-        history.push(routes.PERSONAL_DATA)
+        this.setState(
+          {email: data.email},
+          () => history.push(routes.PERSONAL_DATA)
+        );
       }
     }
     if (data.currentRoute === routes.PERSONAL_DATA) {
-      this.setState({currentUser: data.user})
-      history.push(routes.FRIENDS)
+      this.setState(
+        {currentUser: data.user},
+        () => history.push(routes.FRIENDS)
+      );
     }
     if (data.currentRoute === routes.FRIENDS) {
-      history.push(routes.CHOOSE_PLACE)
+      this.setState(
+        {friendsCount: data.friendsCount},
+        () => history.push(routes.CHOOSE_PLACE)
+      );
     }
   }
 

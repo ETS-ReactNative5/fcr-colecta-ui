@@ -1,30 +1,33 @@
-import React from 'react'
-import {emailLookup} from '../../api'
+import React from 'react';
+import {emailLookup} from '../../api';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
-import * as routes from '../../constants/routes'
+import * as routes from '../../constants/routes';
+import * as Validator from '../../utils/Validator';
 
 class EmailForm extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       email: "",
       isRegistered: false
-    }
+    };
   }
 
   handleSubmit = () => {
-    if (this.state.email !== "") {
+    if (this.state.email !== "" && Validator.validEmail(this.state.email)) {
       emailLookup(this.state.email)
         .then((response) => {
           this.props.onUpdateHistory({currentRoute: routes.EMAIL, isRegistered: !response.new_user, email: this.state.email});
         })
+    } else {
+      alert('El correo no tiene un formato válido');
     }
-  }
+  };
 
   handleInput = (e) => {
-    this.setState({[e.target.name]: e.target.value})
-  }
+    this.setState({[e.target.name]: e.target.value});
+  };
 
   render() {
     return (
@@ -52,7 +55,7 @@ class EmailForm extends React.Component {
         </div>
       </div>
     );
-  }
+  };
 }
 
 export default EmailForm;

@@ -1,11 +1,12 @@
-import React, {Component} from 'react'
+import React, {Component} from 'react';
 import TextField from 'material-ui/TextField';
 import Grid from 'material-ui/Grid';
 import Button from 'material-ui/Button';
-import * as routes from '../../constants/routes'
-import {savePersonalData} from '../../api'
+import * as routes from '../../constants/routes';
+import {savePersonalData} from '../../api';
 import Radio, {RadioGroup} from 'material-ui/Radio';
 import {FormControl, FormLabel, FormControlLabel} from 'material-ui/Form';
+import * as Validator from '../../utils/Validator';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -18,46 +19,61 @@ class PersonalData extends Component {
     this.state = {
       firstname: {value: "", required: true, isValid: false, touched: false},
       lastname: {value: "", required: true, isValid: false, touched: false},
-      identifier: {value: "", required: true, isValid: false, touched: false},
+      identifier: {value: "", required: true, isValid: false, touched: false, validationMethod: Validator.validIdentifier},
       gender: {value: "", required: true, isValid: false, touched: false},
       birthday: {value: "2000-01-01", required: true, isValid: false, touched: false},
-      phone: {value: "", required: true, isValid: false, touched: false},
-      cellphone: {value: "", required: true, isValid: false, touched: false},
-      email: {value: this.props.email, required: true, isValid: false, touched: false},
-      email_confirmation: {value: "", required: true, isValid: false, touched: false},
+      phone: {value: "", required: true, isValid: false, touched: false, validationMethod: Validator.validPhone},
+      cellphone: {value: "", required: true, isValid: false, touched: false, validationMethod: Validator.validCellphone},
+      email: {value: this.props.email, required: true, isValid: false, touched: false, validationMethod: Validator.validEmail},
+      email_confirmation: {value: "", required: true, isValid: false, touched: false, validationMethod: Validator.sameValue, validationParams: 'email'}
     }
   }
 
+  componentDidMount = () => {
+    if (this.props.email === "") {
+      this.props.history.push(routes.EMAIL);
+    }
+  };
+
   handleInput = (event) => {
-    const name = event.target.name
-    const value = event.target.value
-    const hash = this.state[name]
-    hash.value = value
-    hash.isValid = this.isValid(name, value)
-    this.setState({[name]: hash})
-  }
+    const {name, value} = event.target;
+    const hash = this.state[name];
+    hash.value = value;
+    hash.isValid = this.isValid(name, value);
+    this.setState({[name]: hash});
+  };
 
   handleFocus = (event) => {
-    const name = event.target.name
-    const hash = this.state[name]
-    hash.touched = true
-    this.setState({[name]: hash})
-  }
+    const name = event.target.name;
+    const hash = this.state[name];
+    hash.touched = true;
+    hash.isValid = this.isValid(name, event.target.value);
+    this.setState({[name]: hash});
+  };
 
   isValid = (name, value) => {
-    return !this.state[name].required || value !== ""
-  }
+    const {required, validationMethod, validationParams} = this.state[name];
+    let possibleParam = this.state[validationParams];
+    if (possibleParam) {
+      possibleParam = possibleParam.value;
+    }
+    return (!required || value !== "") && (!validationMethod || validationMethod.call(this, value, possibleParam));
+  };
 
   handleSubmit = () => {
     var state = this.state;
+    if (Object.keys(state).filter(f => !state[f].isValid).length > 0) {
+      alert('Algunos de los campos tienen información no válida');
+      return;
+    }
     let data = Object.keys(state).reduce((acc, k) => ({...acc, [k]: state[k].value}), {});
     savePersonalData(data)
       .then((response) => {
         if (response.success) {
           this.props.onUpdateHistory({currentRoute: routes.PERSONAL_DATA, user: response.person});
         }
-      })
-  }
+      });
+  };
 
   render() {
     return (
@@ -181,15 +197,15 @@ class PersonalData extends Component {
                 />
               </FormControl><br/>
               <FormControl className="form-control">
-                <Grid container spacing={10}>
+                <Grid container spacing={8}>
                   <Grid xs={10} item><FormLabel className="social-label">Síguenos en Facebook</FormLabel></Grid>
-                  <Grid xs={2} item><a href="https://www.facebook.com/FCRecuador" target="_blank"><img src={fbLogo} className="social-logo"/></a></Grid>
+                  <Grid xs={2} item><a href="https://www.facebook.com/FCRecuador" target="_blank" rel="noopener noreferrer"><img src={fbLogo} className="social-logo" alt="Facebook"/></a></Grid>
                 </Grid>
               </FormControl>
               <FormControl className="form-control">
-                <Grid container spacing={10}>
+                <Grid container spacing={8}>
                   <Grid xs={10} item><FormLabel className="social-label">Síguenos en Twitter</FormLabel></Grid>
-                  <Grid xs={2} item><a href="https://twitter.com/juntossomosvida" target="_blank"><img src={twLogo} className="social-logo"/></a></Grid>
+                  <Grid xs={2} item><a href="https://twitter.com/juntossomosvida" target="_blank" rel="noopener noreferrer"><img src={twLogo} className="social-logo" alt="Twitter"/></a></Grid>
                 </Grid>
               </FormControl>
             </Grid>
@@ -200,8 +216,8 @@ class PersonalData extends Component {
         </form>
       </div>
     )
-  }
+  };
 
-}
+};
 
-export default PersonalData
+export default PersonalData;

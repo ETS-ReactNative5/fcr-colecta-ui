@@ -1,3 +1,3 @@
-import PersonalData from './PersonalData'
+import PersonalData from './PersonalData';
 
-export default PersonalData
+export default PersonalData;

@@ -1,3 +1,3 @@
-import ChoosePlace from './ChoosePlace'
+import ChoosePlace from './ChoosePlace';
 
-export default ChoosePlace
+export default ChoosePlace;

@@ -12,7 +12,7 @@ export const emailLookup = (email) => {
     }
   })
     .then(response => response.data)
-    .catch(error => error )
+    .catch(error => error)
 }
 
 export const savePersonalData = (data) => {
@@ -35,7 +35,7 @@ export const getCities = () => {
 
 export const getActivePlaces = (data) => {
   return axios.get(`places/${data.cityId}/active`,
-    { params: { scheduleId: data.scheduleId } })
+    {params: {schedule_id: data.scheduleId}})
     .then(response => response.data)
     .catch(error => error)
 }
@@ -53,7 +53,11 @@ export const isLocationAvailable = (data) => {
 }
 
 export const reserveLocation = (data) => {
-  return axios.post('location', data)
-    .then(response => response)
+  return axios.post('location', {
+    place_id: data.placeId,
+    schedule_id: data.scheduleId,
+    responsible_id: data.personId
+  })
+    .then(response => response.data)
     .catch(error => error)
 }
