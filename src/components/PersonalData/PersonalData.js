@@ -161,6 +161,7 @@ class PersonalData extends Component {
                   value={this.state.birthday.value}
                   error={this.state.birthday.touched && !this.state.birthday.isValid}
                   required={this.state.birthday.required}
+                  onkeypress="return false"
                 />
               </FormControl>
             </Grid>
