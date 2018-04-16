@@ -5,7 +5,7 @@ import Button from 'material-ui/Button';
 import * as routes from '../../constants/routes';
 import {savePersonalData} from '../../api';
 import Radio, {RadioGroup} from 'material-ui/Radio';
-import {FormControl, FormLabel, FormControlLabel, FormHelperText} from 'material-ui/Form';
+import {FormControl, FormLabel, FormControlLabel} from 'material-ui/Form';
 import * as Validator from '../../utils/Validator';
 
 import 'react-datepicker/dist/react-datepicker.css';
@@ -163,7 +163,6 @@ class PersonalData extends Component {
                   required={this.state.birthday.required}
                   onkeypress="return false"
                 />
-                <FormHelperText>Recuerda que el formato a usar es mm/dd/yyyy</FormHelperText>
               </FormControl>
             </Grid>
             <Grid item xs={3}>
