@@ -22,18 +22,11 @@ class App extends Component {
 
   updateHistory = (history, data) => {
     if (data.currentRoute === routes.EMAIL) {
-      if (!!data.new_user) {
+      if (!!data.new_user || !data.has_personal_data) {
         this.setState(
           {email: data.email},
           () => history.push(routes.PERSONAL_DATA, data)
         );
-        return;
-      }
-      if (!data.has_personal_data) {
-        this.setState(
-          {email: data.email},
-          () => history.push(routes.PERSONAL_DATA, data)
-        )
         return;
       }
       if (5 > data.friends_count) {
@@ -80,6 +73,9 @@ class App extends Component {
         {friendsCount: data.friendsCount},
         () => history.push(routes.CHOOSE_PLACE)
       );
+    }
+    if (data.currentRoute === routes.CHOOSE_PLACE) {
+      history.push(routes.LANDING);
     }
   }
 
