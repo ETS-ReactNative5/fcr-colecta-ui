@@ -5,7 +5,7 @@ import Button from 'material-ui/Button';
 import * as routes from '../../constants/routes';
 import {savePersonalData} from '../../api';
 import Radio, {RadioGroup} from 'material-ui/Radio';
-import {FormControl, FormLabel, FormControlLabel} from 'material-ui/Form';
+import {FormControl, FormLabel, FormControlLabel, FormHelperText} from 'material-ui/Form';
 import * as Validator from '../../utils/Validator';
 
 import 'react-datepicker/dist/react-datepicker.css';
