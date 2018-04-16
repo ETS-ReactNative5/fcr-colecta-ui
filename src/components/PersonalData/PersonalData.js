@@ -163,6 +163,7 @@ class PersonalData extends Component {
                   required={this.state.birthday.required}
                   onkeypress="return false"
                 />
+                <FormHelperText>Recuerda que el formato a usar es mm/dd/yyyy</FormHelperText>
               </FormControl>
             </Grid>
             <Grid item xs={3}>
