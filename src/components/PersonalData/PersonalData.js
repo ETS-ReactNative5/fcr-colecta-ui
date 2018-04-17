@@ -17,6 +17,18 @@ class PersonalData extends Component {
   constructor(props) {
     super(props)
 
+    this.spanishNames = {
+      firstname: 'Nombre',
+      lastname: 'Apellido',
+      identifier: 'Cédula',
+      gender: 'Género',
+      birthday: 'Fecha de cumpleaños',
+      phone: 'Número de teléfono',
+      cellphone: 'Número celular',
+      email: 'Correo electrónico',
+      email_confirmation: 'Confirmación del correo'
+    };
+
     this.state = {
       firstname: {value: "", required: true, isValid: false, touched: false},
       lastname: {value: "", required: true, isValid: false, touched: false},
@@ -25,7 +37,7 @@ class PersonalData extends Component {
       birthday: {value: "2000-01-01", required: true, isValid: false, touched: false},
       phone: {value: "", required: true, isValid: false, touched: false, validationMethod: Validator.validPhone},
       cellphone: {value: "", required: true, isValid: false, touched: false, validationMethod: Validator.validCellphone},
-      email: {value: props.email, required: true, isValid: false, touched: false, validationMethod: Validator.validEmail},
+      email: {value: props.email, required: true, isValid: false, touched: true, validationMethod: Validator.validEmail},
       email_confirmation: {value: "", required: true, isValid: false, touched: false, validationMethod: Validator.sameValue, validationParams: 'email'}
     }
   }
@@ -81,8 +93,9 @@ class PersonalData extends Component {
 
   handleSubmit = () => {
     var state = this.state;
-    if (Object.keys(state).filter(f => !state[f].isValid).length > 0) {
-      alert('Algunos de los campos tienen información no válida');
+    var fieldsWithErrors = Object.keys(state).filter(f => !state[f].isValid)
+    if (fieldsWithErrors.length > 0) {
+      alert(`Algunos de los campos tienen información no válida\n${fieldsWithErrors.map(f => this.spanishNames[f]).join('\n')}`);
       return;
     }
     let data = Object.keys(state).reduce((acc, k) => ({...acc, [k]: state[k].value}), {});
@@ -91,7 +104,7 @@ class PersonalData extends Component {
         if (response.success) {
           this.props.onUpdateHistory({currentRoute: routes.PERSONAL_DATA, user: response.person});
         } else {
-          alert('No se pudo guardar la información.')
+          alert(`No se pudo guardar la información.\n${response.errors.join('\n')}`)
         }
       });
   };

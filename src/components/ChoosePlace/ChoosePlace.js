@@ -107,7 +107,7 @@ export default class ChoosePlace extends Component {
         alert('Muchas gracias por participar.\nTe hemos enviado un correo de confirmación, por favor sigue las instrucciones para confirmar tu participación');
         this.props.onUpdateHistory({currentRoute: routes.CHOOSE_PLACE, ...response});
       } else {
-        alert('Por favor verifica la información y vuelve a intentar');
+        alert(`Por favor verifica la información y vuelve a intentar\n${response.errors.join('\n')}`);
       }
     });
   };
