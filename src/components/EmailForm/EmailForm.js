@@ -5,6 +5,7 @@ import Button from 'material-ui/Button';
 import {FormControl} from 'material-ui/Form';
 import * as routes from '../../constants/routes';
 import * as Validator from '../../utils/Validator';
+import '../EmailForm/EmailForm.css';
 
 class EmailForm extends React.Component {
   constructor(props) {
@@ -32,12 +33,10 @@ class EmailForm extends React.Component {
   render() {
     return (
       <div className="EmailLookup">
-        <header className="App-header">
-          <h1 className="App-title">¡Inscríbete ya! o ¡Invita más amigos!</h1>
-        </header>
+        <h2 className="App-title">¡Inscríbete ya o invita más amigos!</h2>
         <div>
           <form>
-            <FormControl className="form-control">
+            <FormControl className="form-control email-box">
               <TextField
                 id="email"
                 label="Email"

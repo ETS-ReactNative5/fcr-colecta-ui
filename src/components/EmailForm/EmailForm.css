@@ -1,0 +1,21 @@
+.EmailLookup {
+    width: 450px;
+    margin: 20px auto;
+    border: 1px solid rgb(223, 222, 222);
+    padding: 40px 20px;
+    box-shadow: 0 5px 5px #fbf4eb;
+    border-radius: 20px;
+}
+
+.EmailLookup .form-control.email-box {
+    width: 350px;
+    background-color: #fbf4eb;
+    padding: 5px 25px 15px;
+    border-radius: 35px;
+    margin-bottom: 20px;
+}
+
+.EmailLookup .homepage-button {
+    font-size: 1rem;
+}
+

@@ -88,7 +88,7 @@ a.link{
 .container{
 	position: relative;
 	top: 20px;
-	background-color: #eee;
+	/*background-color: #eee;*/
 	max-height: 800px;
 }
 .btn-fcr{
