@@ -5,7 +5,7 @@ import {MenuItem} from 'material-ui/Menu';
 import {InputLabel} from 'material-ui/Input';
 import {FormControl, FormHelperText} from 'material-ui/Form';
 import Grid from 'material-ui/Grid';
-import Card, { CardActions, CardContent } from 'material-ui/Card';
+import Card, {CardActions, CardContent} from 'material-ui/Card';
 import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
 import * as routes from '../../constants/routes'
@@ -148,29 +148,29 @@ export default class ChoosePlace extends Component {
         </Grid>
         {
           this.state.currentCity.id != null && this.state.currentScheduleId !== "" && !this.state.allPlacesChosen &&
-            <Grid container justify="center">
-              <Grid item xs={5}>
-                <PlacesMap
-                  coordinates={{
-                    lat: this.state.currentCity.latitude,
-                    lng: this.state.currentCity.longitude
-                  }}
-                  places={this.state.places}
-                  onPlaceSelected={this.updateSelectedPlace}
-                />
-              </Grid>
-              <Grid item xs={4}>
-                <PlacesList
-                  places={this.state.places}
-                  onPlaceSelected={this.updateSelectedPlace}
-                />
-              </Grid>
+          <Grid container justify="center">
+            <Grid item xs={12} md={5}>
+              <PlacesMap
+                coordinates={{
+                  lat: this.state.currentCity.latitude,
+                  lng: this.state.currentCity.longitude
+                }}
+                places={this.state.places}
+                onPlaceSelected={this.updateSelectedPlace}
+              />
             </Grid>
+            <Grid item xs={12} md={4}>
+              <PlacesList
+                places={this.state.places}
+                onPlaceSelected={this.updateSelectedPlace}
+              />
+            </Grid>
+          </Grid>
         }
         {this.state.allPlacesChosen && "No hay puntos disponibles en la ciudad y horario seleccionados"}
         {
           this.state.currentPlace &&
-            <Grid container justify="center">
+          <Grid container justify="center">
             <Card className="choosen-place">
               <CardContent>
                 <Typography variant="headline" component="h2">Datos de tu participación</Typography>
@@ -191,7 +191,7 @@ export default class ChoosePlace extends Component {
                 </Button>
               </CardActions>
             </Card>
-            </Grid>
+          </Grid>
         }
       </div>
     )

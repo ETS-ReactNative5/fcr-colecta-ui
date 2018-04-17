@@ -4,7 +4,9 @@ import Grid from 'material-ui/Grid';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
 import {FormControl} from 'material-ui/Form';
+import Card, { CardActions, CardContent } from 'material-ui/Card';
 import Table, {TableBody, TableCell, TableHead, TableRow, TableFooter} from 'material-ui/Table';
+import Hidden from 'material-ui/Hidden';
 import IconButton from 'material-ui/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DoneIcon from '@material-ui/icons/Done';
@@ -131,7 +133,7 @@ class Friends extends React.Component {
           grupo de 10.
         </Typography>
         <Grid container spacing={16}>
-          <Grid item>
+          <Grid item xs={12} md={4}>
             <form>
               <FormControl className="form-control">
                 <TextField
@@ -186,7 +188,8 @@ class Friends extends React.Component {
             </form>
           </Grid>
         {this.state.friends.length > 0 &&
-          <Grid item>
+          <Grid item md={4} xs={12}>
+            <Hidden smDown>
             <Table>
               <TableHead>
                 <TableRow>
@@ -247,6 +250,56 @@ class Friends extends React.Component {
                 </TableRow>
               </TableFooter>
             </Table>
+            </Hidden>
+            <Hidden mdUp>
+              {this.state.friends.map((friend, idx) => {
+                return (
+                  <Card key={idx}>
+                    <CardContent>
+
+                      <Typography gutterBottom variant="headline" component="h2">
+                        {idx + 1}. {friend.firstname} {friend.lastname}
+                      </Typography>
+                      <Typography component="p">
+                        {friend.email}
+                      </Typography>
+                      <Typography component="p">
+                        {friend.cellphone}
+                      </Typography>
+                    </CardContent>
+                    <CardActions>
+                      {friend.new_user &&
+                      <Tooltip title="Borrar">
+                        <IconButton aria-label="Delete" onClick={() => this.deleteFriend(idx)}>
+                          <DeleteIcon/>
+                        </IconButton>
+                      </Tooltip>
+                      }
+                      {
+                        !friend.new_user &&
+                        friend.confirmed &&
+                        <Tooltip title="Confirmado">
+                          <DoneIcon/>
+                        </Tooltip>
+                      }
+                      {
+                        !friend.new_user &&
+                        !friend.confirmed &&
+                        <Tooltip title="Pendiente de confirmación">
+                          <WarningIcon/>
+                        </Tooltip>
+                      }
+                    </CardActions>
+                  </Card>
+                )
+              })}
+              {
+                this.state.friends.length >= 5 &&
+                <Button variant="raised" onClick={this.handleSubmit}>
+                  Guardar
+                </Button>
+              }
+            </Hidden>
           </Grid>
         }
         </Grid>

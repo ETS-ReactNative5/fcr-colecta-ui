@@ -90,6 +90,8 @@ class PersonalData extends Component {
       .then((response) => {
         if (response.success) {
           this.props.onUpdateHistory({currentRoute: routes.PERSONAL_DATA, user: response.person});
+        } else {
+          alert('No se pudo guardar la información.')
         }
       });
   };
@@ -102,7 +104,7 @@ class PersonalData extends Component {
         </header>
         <form>
           <Grid container justify="center">
-            <Grid item xs={3}>
+            <Grid item xs={12} md={3}>
               <FormControl className="form-control">
                 <TextField
                   label="Nombre"
@@ -161,11 +163,10 @@ class PersonalData extends Component {
                   value={this.state.birthday.value}
                   error={this.state.birthday.touched && !this.state.birthday.isValid}
                   required={this.state.birthday.required}
-                  onkeypress="return false"
                 />
               </FormControl>
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={12} md={3}>
               <FormControl className="form-control">
                 <TextField
                   label="Teléfono Fijo"

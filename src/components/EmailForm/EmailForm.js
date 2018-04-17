@@ -2,6 +2,7 @@ import React from 'react';
 import {emailLookup} from '../../api';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
+import {FormControl} from 'material-ui/Form';
 import * as routes from '../../constants/routes';
 import * as Validator from '../../utils/Validator';
 
@@ -36,17 +37,18 @@ class EmailForm extends React.Component {
         </header>
         <div>
           <form>
-            <TextField
-              id="email"
-              label="Email"
-              name="email"
-              placeholder="Ingresa tu correo electrónico"
-              className="homepage-text-field"
-              value={this.state.email}
-              required={true}
-              onChange={this.handleInput}
-              type="email"
-            />
+            <FormControl className="form-control">
+              <TextField
+                id="email"
+                label="Email"
+                name="email"
+                placeholder="Ingresa tu correo electrónico"
+                value={this.state.email}
+                required={true}
+                onChange={this.handleInput}
+                type="email"
+              />
+            </FormControl>
             <Button variant="raised" className="homepage-button" onClick={this.handleSubmit}>
               Ingresar
             </Button>

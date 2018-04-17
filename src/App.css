@@ -13,6 +13,10 @@
   color: white;
 }
 
+.App-header h1 {
+  color: white;
+}
+
 .App-title {
   font-size: 1.5em;
 }
@@ -32,13 +36,12 @@
 }
 
 .homepage-button {
-  margin: 20px !important;
   background-color: #DC983C !important;
   color: #fff !important;
 }
 
 .App .form-control {
-  min-width: 240px;
+  width: 90%;
   margin: 5px;
   text-align: left;
 }
@@ -95,4 +98,8 @@ dd {
 
 .confirm-account {
   margin-top: 50px;
+}
+
+.App .friends h2 {
+  text-align: left;
 }
