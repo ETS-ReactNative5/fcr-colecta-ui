@@ -57,15 +57,11 @@
 .App .form-control [role=radiogroup] .options span:first-child {
   width: 26px;
 }
-
+.social-label {
+  text-align: center;
+}
 .social-logo {
   width: 30px;
-}
-
-.App .social-label {
-  height: 30px;
-  line-height: 33px;
-  vertical-align: middle;
 }
 
 .choose-place thead, .choose-place tfoot {
@@ -102,4 +98,10 @@ dd {
 
 .App .friends h2 {
   text-align: left;
+}
+
+/* New styles */
+.homepage-button {
+  font-size: 1rem !important;
+  width: 90%;
 }
