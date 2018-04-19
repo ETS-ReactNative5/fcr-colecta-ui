@@ -39,7 +39,7 @@ class PersonalData extends Component {
       birthday: {value: "2000-01-01", required: true, isValid: false, touched: false},
       phone: {value: "", required: true, isValid: false, touched: false, validationMethod: Validator.validPhone},
       cellphone: {value: "", required: true, isValid: false, touched: false, validationMethod: Validator.validCellphone},
-      email: {value: props.email, required: true, isValid: false, touched: true, validationMethod: Validator.validEmail},
+      email: {value: "props.email", required: true, isValid: true, touched: true, validationMethod: Validator.validEmail},
       email_confirmation: {value: "", required: true, isValid: false, touched: false, validationMethod: Validator.sameValue, validationParams: 'email'}
     }
   }
