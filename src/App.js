@@ -67,6 +67,7 @@ class App extends Component {
         {currentUser: data.user},
         () => history.push(routes.FRIENDS)
       );
+      return;
     }
     if (data.currentRoute === routes.FRIENDS) {
       this.setState(

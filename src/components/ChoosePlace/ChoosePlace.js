@@ -33,6 +33,7 @@ export default class ChoosePlace extends Component {
     console.log(this.props);
     if (this.props.friendsCount < 5) {
       this.props.history.push(routes.FRIENDS);
+      return;
     }
     this.loadCities();
     this.loadSchedules();
