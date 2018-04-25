@@ -50,17 +50,15 @@ class App extends Component {
         )
         return;
       }
-      // To complete friends
-      if (10 > data.friends_count) {
-        this.setState(
-          {
-            email: data.email,
-            currentUser: data
-          },
-          () => history.push(routes.FRIENDS)
-        )
-        return;
-      }
+      // For any other case (full data, more than 5 friends or chosen location)
+      // we send the user to friends screen
+      this.setState(
+        {
+          email: data.email,
+          currentUser: data
+        },
+        () => history.push(routes.FRIENDS)
+      )
     }
     if (data.currentRoute === routes.PERSONAL_DATA) {
       this.setState(
