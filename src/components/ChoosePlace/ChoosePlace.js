@@ -22,7 +22,7 @@ export default class ChoosePlace extends Component {
       currentCityId: "",
       currentCity: {},
       places: [],
-      currentPlace: null,
+      currentPlace: {},
       currentScheduleId: "",
       schedules: [],
       allPlacesChosen: false
@@ -30,7 +30,6 @@ export default class ChoosePlace extends Component {
   }
 
   componentDidMount = () => {
-    console.log(this.props);
     if (this.props.friendsCount < 5) {
       this.props.history.push(routes.FRIENDS);
       return;
@@ -55,7 +54,7 @@ export default class ChoosePlace extends Component {
   updatePlaces = (event) => {
     this.setState({
       places: [],
-      currentPlace: null,
+      currentPlace: {},
       allPlacesChosen: false
     });
 
@@ -96,6 +95,8 @@ export default class ChoosePlace extends Component {
 
   updateSelectedPlace = (place) => {
     this.setState({currentPlace: place});
+    // We use old school js (a.k.a vanilla) to scroll to bottom of page
+    window.scrollTo(0, document.body.scrollHeight);
   };
 
   handleSubmit = () => {
@@ -157,12 +158,14 @@ export default class ChoosePlace extends Component {
                   lng: this.state.currentCity.longitude
                 }}
                 places={this.state.places}
+                currentPlace={this.state.currentPlace}
                 onPlaceSelected={this.updateSelectedPlace}
               />
             </Grid>
             <Grid item xs={12} md={4}>
               <PlacesList
                 places={this.state.places}
+                currentPlace={this.state.currentPlace}
                 onPlaceSelected={this.updateSelectedPlace}
               />
             </Grid>
@@ -170,7 +173,7 @@ export default class ChoosePlace extends Component {
         }
         {this.state.allPlacesChosen && "No hay puntos disponibles en la ciudad y horario seleccionados"}
         {
-          this.state.currentPlace &&
+          this.state.currentPlace.id &&
           <Grid container justify="center">
             <Card className="choosen-place">
               <CardContent>

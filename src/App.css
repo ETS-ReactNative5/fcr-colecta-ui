@@ -69,6 +69,10 @@
   background-color: #DC983C;
 }
 
+.choose-place tr.selected {
+  background-color: darkgoldenrod;
+}
+
 .choosen-place {
   max-width: 400px;
   margin-bottom: 10px;

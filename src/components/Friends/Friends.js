@@ -99,6 +99,16 @@ class Friends extends React.Component {
     saveFriends({friends: this.state.friends.filter(f => f.new_user)})
       .then((response) => {
         if (response.success === true) {
+          // This is a ugly way of do it but...
+          // If current user already has a location
+          // we will keep him into friends page
+          if (this.props.currentUser.has_location) {
+            alert("Datos guardados con éxito\nEn esta página puedes revisar el estado de confirmación de tus amigos")
+            getFriends(this.props.currentUser).then(response => {
+              this.setState({friends: response});
+            });
+            return;
+          }
           this.props.onUpdateHistory({
             currentRoute: routes.FRIENDS,
             friendsCount: this.state.friends.length,
