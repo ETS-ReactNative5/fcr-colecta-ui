@@ -6,13 +6,20 @@ import Button from 'material-ui/Button';
 import {FormControl} from 'material-ui/Form';
 import Card, { CardActions, CardContent } from 'material-ui/Card';
 import Table, {TableBody, TableCell, TableHead, TableRow, TableFooter} from 'material-ui/Table';
+import Dialog, {
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  withMobileDialog,
+} from 'material-ui/Dialog';
 import Hidden from 'material-ui/Hidden';
 import IconButton from 'material-ui/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DoneIcon from '@material-ui/icons/Done';
 import WarningIcon from '@material-ui/icons/Warning';
 import Tooltip from 'material-ui/Tooltip';
-import {saveFriends, emailLookup, getFriends} from '../../api'
+import {saveFriends, emailLookup, getFriends, destroyFriend} from '../../api'
 import * as routes from "../../constants/routes";
 import * as Validator from "../../utils/Validator";
 
@@ -26,7 +33,12 @@ class Friends extends React.Component {
       email: {value: '', touched: false, isValid: false, required: true, validationMethod: Validator.validEmail},
       cellphone: {value: '', touched: false, isValid: false, required: true, validationMethod: Validator.validCellphone},
       friends: [],
+      dialogOpen: false
     };
+    this.friendToDelete = {
+      id: null,
+      idx: -1
+    }
   }
 
   componentDidMount = () => {
@@ -89,10 +101,35 @@ class Friends extends React.Component {
     })
   };
 
+  // Remove a friend just form collection
   deleteFriend = (idFriend) => {
     let friends = this.state.friends;
     friends.splice(idFriend, 1);
     this.setState({friends: friends});
+  };
+
+  confirmRemoveFriend = (idFriend, idx) => {
+    this.friendToDelete = { id: idFriend, idx: idx };
+    this.setState({dialogOpen: true});
+  };
+
+  handleDialogClose = () => {
+    this.friendToDelete = { };
+    this.setState({dialogOpen: false});
+
+  }
+
+  // Remove a friend in API
+  removeFriend = () => {
+    destroyFriend({id: this.props.currentUser.id, friendId: this.friendToDelete.id})
+      .then((response) => {
+        if (response.success === true) {
+          this.deleteFriend(this.friendToDelete.idx);
+        } else {
+          alert("No se pudo eliminar a tu amigo");
+        }
+        this.handleDialogClose();
+      })
   };
 
   handleSubmit = () => {
@@ -130,6 +167,8 @@ class Friends extends React.Component {
   };
 
   render() {
+    const { fullScreen } = this.props;
+
     return (
       <div className="friends">
         <header className="App-header">
@@ -197,69 +236,78 @@ class Friends extends React.Component {
               }
             </form>
           </Grid>
-        {this.state.friends.length > 0 &&
+          {this.state.friends.length > 0 &&
           <Grid item md={4} xs={12}>
             <Hidden smDown>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell/>
-                  <TableCell>Nombre</TableCell>
-                  <TableCell>Apellido</TableCell>
-                  <TableCell>Correo</TableCell>
-                  <TableCell>Celular</TableCell>
-                  <TableCell/>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {this.state.friends.map((friend, idx) => {
-                  return (
-                    <TableRow key={idx}>
-                      <TableCell>{idx + 1}</TableCell>
-                      <TableCell>{friend.firstname}</TableCell>
-                      <TableCell>{friend.lastname}</TableCell>
-                      <TableCell>{friend.email}</TableCell>
-                      <TableCell>{friend.cellphone}</TableCell>
-                      <TableCell>
-                        {friend.new_user &&
-                          <Tooltip title="Borrar">
-                        <IconButton aria-label="Delete" onClick={() => this.deleteFriend(idx)}>
-                          <DeleteIcon/>
-                        </IconButton>
-                          </Tooltip>
-                        }
-                        {
-                          !friend.new_user &&
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell/>
+                    <TableCell>Nombre</TableCell>
+                    <TableCell>Apellido</TableCell>
+                    <TableCell>Correo</TableCell>
+                    <TableCell>Celular</TableCell>
+                    <TableCell/>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {this.state.friends.map((friend, idx) => {
+                    return (
+                      <TableRow key={idx}>
+                        <TableCell>{idx + 1}</TableCell>
+                        <TableCell>{friend.firstname}</TableCell>
+                        <TableCell>{friend.lastname}</TableCell>
+                        <TableCell>{friend.email}</TableCell>
+                        <TableCell>{friend.cellphone}</TableCell>
+                        <TableCell>
+                          {
+                            friend.new_user &&
+                            <Tooltip title="Borrar">
+                              <IconButton aria-label="Delete" onClick={() => this.deleteFriend(idx)}>
+                                <DeleteIcon/>
+                              </IconButton>
+                            </Tooltip>
+                          }
+                          {
+                            !friend.new_user &&
+                            <Tooltip title="Borrar">
+                              <IconButton aria-label="Delete" onClick={() => this.confirmRemoveFriend(friend.id, idx)}>
+                                <DeleteIcon/>
+                              </IconButton>
+                            </Tooltip>
+                          }
+                          {
+                            !friend.new_user &&
                             friend.confirmed &&
                             <Tooltip title="Confirmado">
-                            <DoneIcon/>
+                              <DoneIcon/>
                             </Tooltip>
-                        }
-                        {
-                          !friend.new_user &&
+                          }
+                          {
+                            !friend.new_user &&
                             !friend.confirmed &&
                             <Tooltip title="Pendiente de confirmación">
-                            <WarningIcon/>
+                              <WarningIcon/>
                             </Tooltip>
-                        }
-                      </TableCell>
-                    </TableRow>
-                  )
-                })}
-              </TableBody>
-              <TableFooter>
-                <TableRow>
-                  <TableCell colSpan={6}>
-                    {
-                      this.state.friends.length >= this.props.settings.friends &&
-                      <Button variant="raised" onClick={this.handleSubmit}>
-                        Guardar
-                      </Button>
-                    }
-                  </TableCell>
-                </TableRow>
-              </TableFooter>
-            </Table>
+                          }
+                        </TableCell>
+                      </TableRow>
+                    )
+                  })}
+                </TableBody>
+                <TableFooter>
+                  <TableRow>
+                    <TableCell colSpan={6}>
+                      {
+                        this.state.friends.length >= this.props.settings.friends &&
+                        <Button variant="raised" onClick={this.handleSubmit}>
+                          Guardar
+                        </Button>
+                      }
+                    </TableCell>
+                  </TableRow>
+                </TableFooter>
+              </Table>
             </Hidden>
             <Hidden mdUp>
               {this.state.friends.map((friend, idx) => {
@@ -278,12 +326,21 @@ class Friends extends React.Component {
                       </Typography>
                     </CardContent>
                     <CardActions>
-                      {friend.new_user &&
-                      <Tooltip title="Borrar">
-                        <IconButton aria-label="Delete" onClick={() => this.deleteFriend(idx)}>
-                          <DeleteIcon/>
-                        </IconButton>
-                      </Tooltip>
+                      {
+                        friend.new_user &&
+                        <Tooltip title="Borrar">
+                          <IconButton aria-label="Delete" onClick={() => this.deleteFriend(idx)}>
+                            <DeleteIcon/>
+                          </IconButton>
+                        </Tooltip>
+                      }
+                      {
+                        !friend.new_user &&
+                          <Tooltip title="Borrar">
+                            <IconButton aria-label="Delete" onClick={() => this.confirmRemoveFriend(friend.id, idx)}>
+                              <DeleteIcon/>
+                            </IconButton>
+                          </Tooltip>
                       }
                       {
                         !friend.new_user &&
@@ -311,11 +368,32 @@ class Friends extends React.Component {
               }
             </Hidden>
           </Grid>
-        }
+          }
         </Grid>
+        <Dialog
+          fullScreen={fullScreen}
+          open={this.state.dialogOpen}
+          onClose={this.handleDialogClose}
+          aria-labelledby="responsive-dialog-title"
+        >
+          <DialogTitle id="responsive-dialog-title">{"Eliminar Amigo"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              ¿Estás seguro que quieres eliminar a tu amigo?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleDialogClose} color="primary">
+              No!!!
+            </Button>
+            <Button onClick={this.removeFriend} color="primary" autoFocus>
+              Si
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
     );
   };
 };
 
-export default Friends;
+export default withMobileDialog()(Friends);

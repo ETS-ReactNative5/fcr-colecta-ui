@@ -34,6 +34,12 @@ export const getFriends = (data) => {
     .catch(error => error)
 }
 
+export const destroyFriend = (data) => {
+  return axios.delete(`/leader/${data.id}/friend/${data.friendId}`)
+    .then(response => response.data)
+    .catch(error => error)
+}
+
 export const getCities = () => {
   return axios.get('cities')
     .then(response => response.data)
