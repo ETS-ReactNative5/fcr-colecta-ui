@@ -30,7 +30,7 @@ export default class ChoosePlace extends Component {
   }
 
   componentDidMount = () => {
-    if (this.props.friendsCount < 5) {
+    if (this.props.friendsCount < this.props.settings.friends) {
       this.props.history.push(routes.FRIENDS);
       return;
     }
