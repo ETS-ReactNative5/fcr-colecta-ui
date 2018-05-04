@@ -6,6 +6,7 @@ import ChoosePlace from './components/ChoosePlace'
 import ConfirmAccount from './components/ConfirmAccount'
 import {BrowserRouter as Router, Route, Switch, Redirect} from "react-router-dom";
 import * as routes from './constants/routes'
+import {getSettings} from './api'
 
 import './App.css';
 
@@ -16,8 +17,15 @@ class App extends Component {
     this.state = {
       email: "",
       currentUser: null,
-      friendsCount: 0
+      friendsCount: 0,
+      settings: {}
     }
+  }
+
+  componentWillMount= () => {
+    getSettings(this.props.currentUser).then(response => {
+      this.setState({settings: response});
+    });
   }
 
   updateHistory = (history, data) => {
@@ -29,7 +37,7 @@ class App extends Component {
         );
         return;
       }
-      if (5 > data.friends_count) {
+      if (this.state.settings.friends > data.friends_count) {
         this.setState(
           {
             email: data.email,

@@ -74,3 +74,9 @@ export const validateAccount = (data) => {
     .then(response => response.data)
     .catch(error => error)
 }
+
+export const getSettings = () => {
+  return axios.get(`get_settings/`)
+    .then(response => response.data)
+    .catch(error => error)
+}

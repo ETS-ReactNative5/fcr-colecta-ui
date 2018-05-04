@@ -25,7 +25,7 @@ class Friends extends React.Component {
       lastname: {value: '', touched: false, isValid: false, required: true},
       email: {value: '', touched: false, isValid: false, required: true, validationMethod: Validator.validEmail},
       cellphone: {value: '', touched: false, isValid: false, required: true, validationMethod: Validator.validCellphone},
-      friends: []
+      friends: [],
     };
   }
 
@@ -139,7 +139,7 @@ class Friends extends React.Component {
           Invita a tus amigos a participar en la colecta.
         </Typography>
         <Typography>
-          Recuerda que tienes que invitar al menos a 5 amigos para reservar un punto y luego entre todos completar un
+          Recuerda que tienes que invitar al menos a {this.props.settings.friends} amigos para reservar un punto y luego entre todos completar un
           grupo de 10.
         </Typography>
         <Grid container spacing={16}>
@@ -251,7 +251,7 @@ class Friends extends React.Component {
                 <TableRow>
                   <TableCell colSpan={6}>
                     {
-                      this.state.friends.length >= 5 &&
+                      this.state.friends.length >= this.props.settings.friends &&
                       <Button variant="raised" onClick={this.handleSubmit}>
                         Guardar
                       </Button>
@@ -304,7 +304,7 @@ class Friends extends React.Component {
                 )
               })}
               {
-                this.state.friends.length >= 5 &&
+                this.state.friends.length >= this.props.settings.friends &&
                 <Button variant="raised" onClick={this.handleSubmit}>
                   Guardar
                 </Button>
