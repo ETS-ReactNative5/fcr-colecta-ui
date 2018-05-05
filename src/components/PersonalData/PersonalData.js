@@ -95,6 +95,7 @@ class PersonalData extends Component {
 
   handleSubmit = () => {
     var state = this.state;
+    let locationRoute = this.props.settings.join_location === "true" ? routes.JOIN_LOCATION : routes.PERSONAL_DATA;
     var fieldsWithErrors = Object.keys(state).filter(f => !state[f].isValid)
     if (fieldsWithErrors.length > 0) {
       alert(`Algunos de los campos tienen información no válida\n${fieldsWithErrors.map(f => this.spanishNames[f]).join('\n')}`);
@@ -241,11 +242,24 @@ class PersonalData extends Component {
               <br/>
               <br/>
               <Grid container justify="flex-end">
-                <Grid item xs={12}>  
+                { this.props.settings.join_location === "false" &&
+                <Grid item xs={12}>
                   <Button variant="raised" className="homepage-button" onClick={this.handleSubmit}>
                     Guardar
                   </Button>
                 </Grid>
+                }
+                { this.props.settings.join_location === "true" &&
+                <Grid item xs={12}>
+                  <Button variant="raised" className="homepage-button" onClick={this.handleSubmit}>
+                    Líder de punto
+                  </Button>
+                  <Button variant="raised" className="homepage-button" onClick={this.handleSubmit}>
+                    Unirme a un punto
+                  </Button>
+                </Grid>
+                }
+
               </Grid>
             </Grid>
 

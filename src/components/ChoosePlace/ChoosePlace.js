@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {getActivePlaces, getCities, getSchedules, reserveLocation} from '../../api';
+import {getActivePlaces, getCities, getSchedules, reserveLocation, getAvailablePlaces} from '../../api';
 import Select from 'material-ui/Select';
 import {MenuItem} from 'material-ui/Menu';
 import {InputLabel} from 'material-ui/Input';
@@ -30,7 +30,7 @@ export default class ChoosePlace extends Component {
   }
 
   componentDidMount = () => {
-    if (this.props.friendsCount < this.props.settings.friends) {
+    if (this.props.settings.join_location === "false" && this.props.friendsCount < this.props.settings.friends) {
       this.props.history.push(routes.FRIENDS);
       return;
     }
@@ -73,10 +73,17 @@ export default class ChoosePlace extends Component {
       this.setState({currentSchedule: schedule, currentScheduleId: scheduleId});
     }
     if (cityId !== "" && scheduleId !== "") {
-      getActivePlaces({cityId: cityId, scheduleId: scheduleId})
-        .then((response) => {
-          this.setState({places: response, allPlacesChosen: response.length === 0});
-        });
+      if (this.props.settings.join_locaiton === "true") {
+        getAvailablePlaces({cityId: cityId, scheduleId: scheduleId})
+          .then((response) => {
+          this.setState({places: response.map(place => { place.place }), allPlacesChosen: response.length === 0})
+          })
+      } else {
+        getActivePlaces({cityId: cityId, scheduleId: scheduleId})
+          .then((response) => {
+            this.setState({places: response, allPlacesChosen: response.length === 0});
+          });
+      }
     }
   };
 

@@ -125,6 +125,12 @@ class App extends Component {
                 <ConfirmAccount {...routeProps} {...this.state} onUpdateHistory={(data) => this.updateHistory(routeProps.history, data)}/>
               )}
             />
+            <Route
+              path={routes.JOIN_LOCATION}
+              render={(routeProps) => (
+                <ChoosePlace {...routeProps} {...this.state} onUpdateHistory={(data) => this.updateHistory(routeProps.history, data)}/>
+              )}
+            />
           </Switch>
         </div>
       </Router>

@@ -86,3 +86,16 @@ export const getSettings = () => {
     .then(response => response.data)
     .catch(error => error)
 }
+
+export const getAvailablePlaces = (data) => {
+  return axios.get(`available_places`,
+    {
+      params: {
+        cityId: data.cityId,
+        scheduleId: data.scheduleId
+      }
+    }
+    )
+    .then(response => response.data)
+    .catch(error => error)
+}
