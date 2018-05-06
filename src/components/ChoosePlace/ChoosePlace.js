@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {getActivePlaces, getCities, getSchedules, reserveLocation, getAvailablePlaces} from '../../api';
+import {getActivePlaces, getCities, getSchedules, reserveLocation, getAvailablePlaces, joinLocation} from '../../api';
 import Select from 'material-ui/Select';
 import {MenuItem} from 'material-ui/Menu';
 import {InputLabel} from 'material-ui/Input';
@@ -30,7 +30,11 @@ export default class ChoosePlace extends Component {
   }
 
   componentDidMount = () => {
-    if (this.props.settings.join_location === "false" && this.props.friendsCount < this.props.settings.friends) {
+    if (this.props.currentUser == null) {
+      this.props.history.push(routes.PERSONAL_DATA);
+      return;
+    }
+    if (this.props.currentUser.is_joining === false && this.props.friendsCount < this.props.settings.friends) {
       this.props.history.push(routes.FRIENDS);
       return;
     }
@@ -73,11 +77,14 @@ export default class ChoosePlace extends Component {
       this.setState({currentSchedule: schedule, currentScheduleId: scheduleId});
     }
     if (cityId !== "" && scheduleId !== "") {
-      if (this.props.settings.join_locaiton === "true") {
+      if (this.props.currentUser.is_joining) {
         getAvailablePlaces({cityId: cityId, scheduleId: scheduleId})
           .then((response) => {
-          this.setState({places: response.map(place => { place.place }), allPlacesChosen: response.length === 0})
-          })
+            this.setState({
+              places: response.map(location => Object.assign({}, location.place, { locationId: location.id }) ),
+              allPlacesChosen: response.length === 0
+            })
+          });
       } else {
         getActivePlaces({cityId: cityId, scheduleId: scheduleId})
           .then((response) => {
@@ -107,18 +114,26 @@ export default class ChoosePlace extends Component {
   };
 
   handleSubmit = () => {
-    reserveLocation({
-      placeId: this.state.currentPlace.id,
-      scheduleId: this.state.currentScheduleId,
-      personId: this.props.currentUser.id
-    }).then(response => {
+    let responseCallback = (response) => {
       if (response.success) {
         alert('Muchas gracias por participar.\nTe hemos enviado un correo de confirmación, por favor sigue las instrucciones para confirmar tu participación');
         this.props.onUpdateHistory({currentRoute: routes.CHOOSE_PLACE, ...response});
       } else {
         alert(`Por favor verifica la información y vuelve a intentar\n${response.errors.join('\n')}`);
       }
-    });
+    };
+    if (this.props.currentUser.is_joining) {
+      joinLocation({
+        locationId: this.state.currentPlace.locationId,
+        personId: this.props.currentUser.id
+      }).then(responseCallback);
+    } else {
+      reserveLocation({
+        placeId: this.state.currentPlace.id,
+        scheduleId: this.state.currentScheduleId,
+        personId: this.props.currentUser.id
+      }).then(responseCallback);
+    }
   };
 
   render() {

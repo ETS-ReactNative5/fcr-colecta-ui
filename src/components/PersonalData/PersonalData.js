@@ -86,6 +86,9 @@ class PersonalData extends Component {
 
   isValid = (name, value) => {
     const {required, validationMethod, validationParams} = this.state[name];
+    if (!required) {
+      return true;
+    }
     let possibleParam = this.state[validationParams];
     if (possibleParam) {
       possibleParam = possibleParam.value;
@@ -93,19 +96,22 @@ class PersonalData extends Component {
     return (!required || value !== "") && (!validationMethod || validationMethod.call(this, value, possibleParam));
   };
 
-  handleSubmit = () => {
-    var state = this.state;
-    let locationRoute = this.props.settings.join_location === "true" ? routes.JOIN_LOCATION : routes.PERSONAL_DATA;
-    var fieldsWithErrors = Object.keys(state).filter(f => !state[f].isValid)
+  handleSubmit = (event) => {
+    let state = this.state;
+    let fieldsWithErrors = Object.keys(state).filter(f => !state[f].isValid)
     if (fieldsWithErrors.length > 0) {
       alert(`Algunos de los campos tienen información no válida\n${fieldsWithErrors.map(f => this.spanishNames[f]).join('\n')}`);
       return;
     }
     let data = Object.keys(state).reduce((acc, k) => ({...acc, [k]: state[k].value}), {});
+    data.is_joining = event.currentTarget.name === 'joinButton';
     savePersonalData(data)
       .then((response) => {
         if (response.success) {
-          this.props.onUpdateHistory({currentRoute: routes.PERSONAL_DATA, user: response.person});
+          this.props.onUpdateHistory({
+            currentRoute: routes.PERSONAL_DATA,
+            user: response.person
+          });
         } else {
           alert(`No se pudo guardar la información.\n${response.errors.join('\n')}`)
         }
@@ -242,19 +248,19 @@ class PersonalData extends Component {
               <br/>
               <br/>
               <Grid container justify="flex-end">
-                { this.props.settings.join_location === "false" &&
+                { this.props.settings.join_location !== "true" &&
                 <Grid item xs={12}>
-                  <Button variant="raised" className="homepage-button" onClick={this.handleSubmit}>
+                  <Button variant="raised" className="homepage-button" name="leaderButton" onClick={this.handleSubmit}>
                     Guardar
                   </Button>
                 </Grid>
                 }
                 { this.props.settings.join_location === "true" &&
                 <Grid item xs={12}>
-                  <Button variant="raised" className="homepage-button" onClick={this.handleSubmit}>
+                  <Button variant="raised" className="homepage-button" name="leaderButton" onClick={this.handleSubmit}>
                     Líder de punto
                   </Button>
-                  <Button variant="raised" className="homepage-button" onClick={this.handleSubmit}>
+                  <Button variant="raised" className="homepage-button" name="joinButton" onClick={this.handleSubmit}>
                     Unirme a un punto
                   </Button>
                 </Grid>

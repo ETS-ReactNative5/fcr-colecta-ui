@@ -29,8 +29,9 @@ export default class PlacesMap extends Component {
       this.markers = this.props.places.map(place => {
           let marker = new maps.Marker({
             position: {lat: place.latitude, lng: place.longitude},
-            title: place.name,
+            name: place.name,
             placeId: place.id,
+            locationId: place.locationId,
             icon: this.markerIcon(this.props.currentPlace.id === place.id ? 'green' : 'red'),
             map
           });
@@ -47,7 +48,6 @@ export default class PlacesMap extends Component {
   };
 
   setSelectedPlace = (selectedMarker) => {
-    console.log(selectedMarker);
     this.markers.forEach(marker => {
       if (marker.placeId !== selectedMarker.placeId) {
         marker.setIcon(this.markerIcon('red'));
@@ -55,7 +55,12 @@ export default class PlacesMap extends Component {
         marker.setIcon(this.markerIcon('green'));
       }
     });
-    this.props.onPlaceSelected({id: selectedMarker.placeId, name: selectedMarker.title});
+    let selectedPlace = {
+      id: selectedMarker.placeId,
+      name: selectedMarker.name,
+      locationId: selectedMarker.locationId
+    };
+    this.props.onPlaceSelected(selectedPlace);
   };
 
   render() {
