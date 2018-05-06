@@ -77,7 +77,7 @@ class Friends extends React.Component {
   }
 
   addFriend = () => {
-    const {friends, ...fields} = this.state;
+    const {friends, dialogOpen, ...fields} = this.state;
     if (Object.keys(fields).filter(f => !fields[f].isValid).length > 0) {
       alert('Algunos de los campos tienen información no válida');
       return;
@@ -335,7 +335,7 @@ class Friends extends React.Component {
                         </Tooltip>
                       }
                       {
-                        !friend.new_user &&
+                        !friend.new_user && this.props.currentUser.is_leader &&
                           <Tooltip title="Borrar">
                             <IconButton aria-label="Delete" onClick={() => this.confirmRemoveFriend(friend.id, idx)}>
                               <DeleteIcon/>

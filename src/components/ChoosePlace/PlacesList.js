@@ -45,7 +45,7 @@ class PlacesList extends React.Component {
               <TableRow
                 key={place.id}
                 hover
-                onClick={event => this.handleClick(event, {id: place.id, name: place.name})}
+                onClick={event => this.handleClick(event, place)}
                 className={this.props.currentPlace.id === place.id ? 'selected' : ''}
               >
                 <TableCell>{place.name}</TableCell>

@@ -35,9 +35,10 @@
   width: 25%
 }
 
-.homepage-button {
+.App .homepage-button {
   background-color: #DC983C !important;
   color: #fff !important;
+  margin-bottom: 10px;
 }
 
 .App .form-control {

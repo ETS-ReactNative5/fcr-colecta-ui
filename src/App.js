@@ -16,9 +16,9 @@ class App extends Component {
     super(props)
     this.state = {
       email: "",
-      currentUser: null,
-      friendsCount: 0,
-      settings: {}
+      currentUser: null, // All data about registered user
+      friendsCount: 0, // Invited friends count
+      settings: {} // App Settings
     }
   }
 
@@ -30,6 +30,14 @@ class App extends Component {
 
   updateHistory = (history, data) => {
     if (data.currentRoute === routes.EMAIL) {
+      if (!data.new_user && (data.is_joining || !data.is_leader) && data.has_location) {
+        if (data.confirmed) {
+          alert(`Usuario confirmado\nUbicación: ${data.location.name}\n${data.friends_count} personas registradas en la misma ubicación.`);
+        } else {
+          alert('Todavía no has confirmado tu participación\nPor favor revisa tu correo y sigue las instrucciones');
+        }
+        return;
+      }
       if (!!data.new_user || !data.has_personal_data) {
         this.setState(
           {email: data.email},
@@ -37,14 +45,14 @@ class App extends Component {
         );
         return;
       }
-      if (this.state.settings.friends > data.friends_count) {
+      if (!data.is_joining && this.state.settings.friends > data.friends_count) {
         this.setState(
           {
             email: data.email,
             currentUser: data
           },
           () => history.push(routes.FRIENDS)
-        )
+        );
         return;
       }
       if (!data.has_location) {
@@ -54,11 +62,11 @@ class App extends Component {
             currentUser: data,
             friendsCount: data.friends_count
           },
-          () => history.push(routes.CHOOSE_PLACE)
-        )
+          () => history.push(data.is_joining ? routes.JOIN_LOCATION : routes.CHOOSE_PLACE)
+        );
         return;
       }
-      // For any other case (full data, more than 5 friends or chosen location)
+      // For any other case (full data, more than x friends or chosen location)
       // we send the user to friends screen
       this.setState(
         {
@@ -66,12 +74,14 @@ class App extends Component {
           currentUser: data
         },
         () => history.push(routes.FRIENDS)
-      )
+      );
     }
     if (data.currentRoute === routes.PERSONAL_DATA) {
       this.setState(
-        {currentUser: data.user},
-        () => history.push(routes.FRIENDS)
+        {
+          currentUser: data.user,
+        },
+        () => history.push(data.user.is_joining ? routes.JOIN_LOCATION : routes.FRIENDS)
       );
       return;
     }
@@ -123,6 +133,12 @@ class App extends Component {
               path={routes.CONFIRM_ACCOUNT}
               render={(routeProps) => (
                 <ConfirmAccount {...routeProps} {...this.state} onUpdateHistory={(data) => this.updateHistory(routeProps.history, data)}/>
+              )}
+            />
+            <Route
+              path={routes.JOIN_LOCATION}
+              render={(routeProps) => (
+                <ChoosePlace {...routeProps} {...this.state} onUpdateHistory={(data) => this.updateHistory(routeProps.history, data)}/>
               )}
             />
           </Switch>
