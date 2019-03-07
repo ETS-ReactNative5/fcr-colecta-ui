@@ -30,15 +30,15 @@ class App extends Component {
 
   updateHistory = (history, data) => {
     if (data.currentRoute === routes.EMAIL) {
-      //Path to close inscriptions
-      if (data.new_user) {
-        alert('Correo no registrado');
-        return;
-      }
-      if (data.location) {
-        alert(`Usuario registrado\nUbicación: ${data.location.name}\n${data.friends_count} personas registradas en la misma ubicación.`);
-      }
-      return;
+      // //Path to close inscriptions
+      // if (data.new_user) {
+      //   alert('Correo no registrado');
+      //   return;
+      // }
+      // if (data.location) {
+      //   alert(`Usuario registrado\nUbicación: ${data.location.name}\n${data.friends_count} personas registradas en la misma ubicación.`);
+      // }
+      // return;
 
       if (!data.new_user && (data.is_joining || !data.is_leader) && data.has_location) {
         if (data.confirmed) {
