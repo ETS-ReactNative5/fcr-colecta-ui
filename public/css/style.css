@@ -1,5 +1,5 @@
 body{
-    background-color:white; 
+    background-color:white;
 }
 h1, h2, h3, h4, a, strong{
 	color:#d48725;
@@ -45,11 +45,11 @@ a.link{
 	list-style-type: none;
 	margin: 3% 0 0 0;
 }
-#menu ul li { 
-	display: inline; 
+#menu ul li {
+	display: inline;
 	margin: 0 4%;
 }
-#menu ul li a{ 
+#menu ul li a{
 	text-decoration: none;
 	font-size: 1.175em;
 }
@@ -61,7 +61,7 @@ a.link{
     #menu ul{
 		margin: 1% 0 0 0;
 	}
-    #menu ul li a{ 
+    #menu ul li a{
 		text-decoration: none;
 		font-size: 0.175em;
 	}
@@ -72,10 +72,10 @@ a.link{
 	    height: 60px;
 	}
 }
-#menu ul li a:hover{ 
+#menu ul li a:hover{
 	border-bottom: 2px solid #d48725;
 }
-#menu ul li a.activo{ 
+#menu ul li a.activo{
 	border-bottom: 2px solid #d48725;
 }
 .clear {
@@ -88,8 +88,8 @@ a.link{
 .container{
 	position: relative;
 	top: 20px;
-	/*background-color: #eee;*/
-	max-height: 800px;
+	background-color: #eee;
+	height: 300px;
 }
 .btn-fcr{
 	background-color: #ea335f;
@@ -106,5 +106,5 @@ a.link{
 	background-color: #ffffff;
 	color: #ea335f;
 	border:1px solid #ea335f;
-	
+
 }
