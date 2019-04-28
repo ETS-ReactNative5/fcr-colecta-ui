@@ -8,6 +8,8 @@ import Grid from 'material-ui/Grid';
 import Card, {CardActions, CardContent} from 'material-ui/Card';
 import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
+import moment from "moment";
+import 'moment/locale/es';
 import * as routes from '../../constants/routes'
 
 import PlacesMap from './PlacesMap';
@@ -103,7 +105,7 @@ export default class ChoosePlace extends Component {
 
   showSchedules = () => {
     return this.state.schedules.map((schedule) => {
-      return <MenuItem key={schedule.id} value={schedule.id}>{schedule.day} - {schedule.time}</MenuItem>;
+      return <MenuItem key={schedule.id} value={schedule.id}>{moment(schedule.day).format('dddd DD')} de {schedule.time.replace('-', ' a ')}</MenuItem>;
     });
   };
 
