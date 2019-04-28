@@ -69,7 +69,7 @@ export default class PlacesMap extends Component {
       <div style={{height: '576px', width: '100%'}}>
         <GoogleMapReact
           bootstrapURLKeys={{
-            key: "AIzaSyDCEEtEPWvLwrP-M0nJz4MeIRtRa_wiuJk",
+            key: "AIzaSyAJ-ZXowlits1rKNjckGKdpRK3okG6oIRs",
             language: 'es',
             region: 'EC'
           }}
