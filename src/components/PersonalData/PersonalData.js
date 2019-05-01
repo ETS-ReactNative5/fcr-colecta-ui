@@ -118,6 +118,10 @@ class PersonalData extends Component {
       });
   };
 
+  showWaitMessage = () => {
+    alert('Esta opción se abrirá proximamente');
+  };
+
   render() {
     return (
       <div className="personal-data">
@@ -190,7 +194,7 @@ class PersonalData extends Component {
                 </FormControl>
               </Paper>
             </Grid>
-            <Grid item xs={12} md={5} lg={4}>  
+            <Grid item xs={12} md={5} lg={4}>
               <Paper className="box">
                 <h3>Información de contacto</h3>
                 <FormControl className="form-control">
@@ -248,24 +252,14 @@ class PersonalData extends Component {
               <br/>
               <br/>
               <Grid container justify="flex-end">
-                { this.props.settings.join_location !== "true" &&
-                <Grid item xs={12}>
-                  <Button variant="raised" className="homepage-button" name="leaderButton" onClick={this.handleSubmit}>
-                    Guardar
-                  </Button>
-                </Grid>
-                }
-                { this.props.settings.join_location === "true" &&
                 <Grid item xs={12}>
                   <Button variant="raised" className="homepage-button" name="leaderButton" onClick={this.handleSubmit}>
                     Líder de punto
                   </Button>
-                  <Button variant="raised" className="homepage-button" name="joinButton" onClick={this.handleSubmit}>
+                  <Button variant="raised" className="homepage-button" name="joinButton" onClick={ this.props.settings.join_location === "true" ? this.handleSubmit : this.showWaitMessage }>
                     Unirme a un punto
                   </Button>
                 </Grid>
-                }
-
               </Grid>
             </Grid>
 
